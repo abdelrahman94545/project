@@ -10,6 +10,8 @@ import Page from "@jumbo/shared/Page";
 
 import CreateUser from "../pages/dashboards/Users/createUser/CreateUser";
 import UsersList from "../pages/list-views/UsersList";
+import ListAccountType from "../pages/dashboards/AccountType/ListAccountType";
+import CreateAccountType from "../pages/dashboards/AccountType/CreateAccountType";
 
 const adminRoutes = [
    
@@ -24,6 +26,18 @@ const adminRoutes = [
     {
         path: "/list-views/users",
         element: <Page component={UsersList}/>,
+    },
+    {
+        path: "/dashboards/accountType",
+        element: <Page component={ListAccountType} />,   
+    },
+    {
+        path: "/dashboards/createAccountType",
+        element: <Page component={CreateAccountType} />,   
+    },
+    {
+        path: "/dashboards/accountType/edit/:id",
+        element: <Page component={CreateAccountType} />,
     },
 ];
 

@@ -70,6 +70,20 @@ export const Menus = () => {
                 type: "nav-item",
                 icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
             },
+            {
+                uri: "/dashboards/accountType",
+                label: 'Account Type',
+                // label: 'sidebar.menuItem.createUser',
+                type: "nav-item",
+                icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
+            },
+            {
+                uri: "/dashboards/createAccountType",
+                label: 'create Account Type',
+                // label: 'sidebar.menuItem.createUser',
+                type: "nav-item",
+                icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
+            },
         ]
     }
     : null

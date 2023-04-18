@@ -1,31 +1,32 @@
-import React, {useEffect, useState} from 'react';
-import {users} from "./data";
-import UserItem from "./UserItem";
-import {Typography, Card} from "@mui/material";
-
-import AuthAxios from "../../../services/auth-axios";
-import { useSelector, useDispatch } from 'react-redux';
-import { addUsers } from "../../../redux2/reducers/usersListSlice";
-import { toast } from 'react-toastify';
+import React, {useEffect} from 'react';
+import AxiosApis from "../../../services/AxiosApis";
 import {useNavigate} from "react-router-dom";
-import Filter from '../../../components/Filter'
+import { toast } from 'react-toastify';
+import ListData from "../../../components/ListData";
+import {Typography, Card} from "@mui/material";
+import { addAccountType } from "../../../redux2/reducers/AccountTypeSlice";
+import { useSelector, useDispatch } from 'react-redux';
+import {Link} from "react-router-dom";
 
 
-const UsersList = () => {
 
-    const usersListData = useSelector(state => state.usersList.users)
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+const ListAccountType = () => {
+
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
-    const [filteredData, setFilteredData] = useState(null)
-    const [filteredResult, setFilteredResult] = useState(null)
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const accountTypeData = useSelector(state => state.accountType.accountTypeData)
 
 
-    const getUsersDataFun = async (Token, refreshVal) => {
+    const getAccountTypeDataFun = async (Token, refreshVal) => {
 
         try{
-            await AuthAxios().usersList(Token, refreshVal)
+            // console.log("axios =", AuthAxios().usersList());
+            // if(usersListData === null)
+            // {
+            await AxiosApis().listAccountType(Token, refreshVal)
+
             .then((data) => {
 
                 if(data === false)
@@ -34,8 +35,10 @@ const UsersList = () => {
                     return false
                 }
 
-                dispatch(addUsers(data))
-            }) 
+                dispatch(addAccountType(data))
+            })
+            // }
+           
         }
         catch(error){
             console.log("list error =" ,error);
@@ -52,18 +55,18 @@ const UsersList = () => {
         }
     }
 
-
     useEffect( async ()=>{
-        if(usersListData === null)
+        if(accountTypeData === null)
         {
-            getUsersDataFun(localStorageToken, localStorageRefresh)
+            getAccountTypeDataFun(localStorageToken, localStorageRefresh)
         }
     },[])
+
 
     const DeleteFun = async (id) => {
         try
         {
-            await AuthAxios().deleteUser(id, localStorageToken, localStorageRefresh)
+            await AxiosApis().DeleteAccountType(id, localStorageToken, localStorageRefresh)
             .then((res) => {
 
                 if(res === false)
@@ -72,9 +75,9 @@ const UsersList = () => {
                     return false
                 }
 
-                getUsersDataFun(localStorageToken, localStorageRefresh)
+                getAccountTypeDataFun(localStorageToken, localStorageRefresh)
 
-                toast.success("The user has been Deleted",{
+                toast.success("The Account Type Has Been Deleted",{
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -101,33 +104,42 @@ const UsersList = () => {
         }
     }
 
+
     return (
         <React.Fragment>
             <Typography variant={'h2'} mb={3}>
                 {/* Users2 */}
             </Typography>
 
-            <Filter setFilteredResult={setFilteredResult} />
+            {/* <Filter setFilteredResult={setFilteredResult} /> */}
      
             {/* data without filtering */}
-            { filteredResult === null ? (
-                (usersListData && usersListData !== null) ?
-                usersListData.map((users, index) => (
-                    <UserItem userData={users} key={index}  DeleteFun={DeleteFun}/>
+            { 
+            // filteredResult === null ? (
+                (accountTypeData && accountTypeData !== null) ?
+                accountTypeData.map((types, index) => (
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
+                        <ListData Data={types} 
+                         DeleteFun={DeleteFun}
+                         key={index}
+                        />
+                    </Link>
+                    
                 ))
             :null
 
-             ) : 
+            //  ) : 
             //   data with filtering 
-              filteredResult !== null ?
-                filteredResult.map((users, index) => (
-                    <UserItem userData={users} key={index}  DeleteFun={DeleteFun}/>
-                ))
+            //   filteredResult !== null ?
+            //     filteredResult.map((users, index) => (
+            //         <UserItem userData={users} key={index}  DeleteFun={DeleteFun}/>
+            //     ))
                 
-            :null
+            // :null
             }
         </React.Fragment>
-    );
-};
+    )
+}
 
-export default UsersList;
+
+export default ListAccountType

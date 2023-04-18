@@ -13,7 +13,7 @@ const authAxios = {};
 authAxios.verifyAndRefreshToken = async (tokenVal, refreshVal) => {
   try
   {
-    const verifyData = await Instance.post('/token/verify/', {token: tokenVal})
+    const verifyData = await Instance.post('/api/token/verify/', {token: tokenVal})
 
     return verifyData.status;
     
@@ -25,10 +25,10 @@ authAxios.verifyAndRefreshToken = async (tokenVal, refreshVal) => {
 
       try
       {
-        console.log("refresh api =", refreshVal);
-        const refreshData = await Instance.post('/token/refresh/', {refresh: refreshVal})
-        console.log("refresh api seccess =", refreshData)
-        console.log("refresh2 api seccess =", refreshData.data.access)
+        // console.log("refresh api =", refreshVal);
+        const refreshData = await Instance.post('/api/token/refresh/', {refresh: refreshVal})
+        // console.log("refresh api seccess =", refreshData)
+        // console.log("refresh2 api seccess =", refreshData.data.access)
 
           // save new token in local storage
           localStorage.setItem("token", refreshData.data.access)
@@ -37,7 +37,7 @@ authAxios.verifyAndRefreshToken = async (tokenVal, refreshVal) => {
       catch(error)
       {
         
-        console.log("refresh api  error =", error.response)
+        // console.log("refresh api  error =", error.response)
         // remove token from local storage and log out
         localStorage.removeItem("token");
         localStorage.removeItem("refresh");
@@ -69,7 +69,7 @@ authAxios.createUser = async (userData,Token, refreshVal) => {
   const status = await authAxios.verifyAndRefreshToken(Token, refreshVal)
   if(status === 200)
   {
-    const {data} = await Instance.post('/user/', userData)
+    const {data} = await Instance.post('/api/user/', userData)
     return data;
   }
   else
@@ -82,7 +82,7 @@ authAxios.getEditUser = async (Id, Token, refreshVal) => {
   const status = await authAxios.verifyAndRefreshToken(Token, refreshVal)
   if(status === 200)
   {
-  const {data} = await Instance.get(`/user/${Id}/`)
+  const {data} = await Instance.get(`/api/user/${Id}/`)
   return data;
   }
   else
@@ -95,7 +95,7 @@ authAxios.editUser = async (Id, userData, Token, refreshVal) => {
   const status = await authAxios.verifyAndRefreshToken(Token, refreshVal)
   if(status === 200)
   {
-  const {data} = await Instance.put(`/user/${Id}/`, userData)
+  const {data} = await Instance.put(`/api/user/${Id}/`, userData)
   return data;
   }
   else
@@ -108,7 +108,7 @@ authAxios.deleteUser = async (Id, Token, refreshVal) => {
   const status = await authAxios.verifyAndRefreshToken(Token, refreshVal)
   if(status === 200)
   {
-  const {data} = await Instance.delete(`/user/${Id}/`)
+  const {data} = await Instance.delete(`/api/user/${Id}/`)
   return data;
   }
   else
@@ -122,7 +122,7 @@ authAxios.usersList =  async(Token, refreshVal) => {
 
   if(status === 200)
   {
-    const {data} = await Instance.get('/user/')
+    const {data} = await Instance.get('/api/user/')
   return data;
   }
   else
@@ -132,17 +132,17 @@ authAxios.usersList =  async(Token, refreshVal) => {
 }
 ////////////////
 authAxios.logIn = async (loginCreds) => {
-  const {data} = await Instance.post('/login/', loginCreds);
+  const {data} = await Instance.post('/api/login/', loginCreds);
   return data;
 };
 
 authAxios.forgotPass = async (resetData, code) => { 
-  const {data} = await Instance.post(`/reset/${code ? `${code}`:''}`, resetData);
+  const {data} = await Instance.post(`/api/reset/${code ? `${code}`:''}`, resetData);
   return data;
 };
 
 authAxios.register = async (registerData) => {
-  const {data} = await Instance.post('/register/', registerData);
+  const {data} = await Instance.post('/api/register/', registerData);
   return data;
 };
 
