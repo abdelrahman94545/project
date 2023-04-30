@@ -6,6 +6,7 @@ const AxiosApis = () => {
     const axiosApis = {};
 
 
+    // Account Type Api
     axiosApis.listAccountType = async (Token, refreshVal) => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
@@ -71,6 +72,73 @@ const AxiosApis = () => {
         }
     }
 
+
+    // Company Api
+    axiosApis.getCompanyData = async (Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.get('/account/company/company/')
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.createCompany = async (companyData, Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.post('/account/company/company/', companyData)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.getEditCompanyData = async (Id, Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.get(`/account/company/company/${Id}/`)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.editCompanyData = async (Id, companyData, Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.put(`/account/company/company/${Id}/`, companyData)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+
+    axiosApis.deleteCompany = async (Id, Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.delete(`/account/company/company/${Id}/`)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
 
 
 

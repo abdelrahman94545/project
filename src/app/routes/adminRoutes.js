@@ -12,6 +12,8 @@ import CreateUser from "../pages/dashboards/Users/createUser/CreateUser";
 import UsersList from "../pages/list-views/UsersList";
 import ListAccountType from "../pages/dashboards/AccountType/ListAccountType";
 import CreateAccountType from "../pages/dashboards/AccountType/CreateAccountType";
+import ListCompanies from "../pages/dashboards/Companies/ListCompanies";
+import CreateCompany from "../pages/dashboards/Companies/CreateCompany";
 
 const adminRoutes = [
    
@@ -28,7 +30,7 @@ const adminRoutes = [
         element: <Page component={UsersList}/>,
     },
     {
-        path: "/dashboards/accountType",
+        path: "/dashboards/listAccountType",
         element: <Page component={ListAccountType} />,   
     },
     {
@@ -38,6 +40,18 @@ const adminRoutes = [
     {
         path: "/dashboards/accountType/edit/:id",
         element: <Page component={CreateAccountType} />,
+    },
+    {
+        path: "/dashboards/listCompanies",
+        element: <Page component={ListCompanies} />,   
+    },
+    {
+        path: "/dashboards/createCompanies",
+        element: <Page component={CreateCompany} />,   
+    },
+    {
+        path: "/dashboards/Companies/edit/:id",
+        element: <Page component={CreateCompany} />,   
     },
 ];
 

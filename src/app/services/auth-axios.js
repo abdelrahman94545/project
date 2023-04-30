@@ -21,8 +21,6 @@ authAxios.verifyAndRefreshToken = async (tokenVal, refreshVal) => {
   catch(error)
   {
     // console.log("verify api error =", error.response.status);
-
-
       try
       {
         // console.log("refresh api =", refreshVal);
@@ -55,10 +53,7 @@ authAxios.verifyAndRefreshToken = async (tokenVal, refreshVal) => {
 
         return false
       }
-    
   }
-  
- 
 }
 
 

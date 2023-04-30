@@ -1,33 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {users} from "./data";
-import UserItem from "./UserItem";
-import {Typography, Card} from "@mui/material";
-
-import AuthAxios from "../../../services/auth-axios";
-import { useSelector, useDispatch } from 'react-redux';
-import { addUsers } from "../../../redux2/reducers/usersListSlice";
-import { toast } from 'react-toastify';
+import AxiosApis from "../../../services/AxiosApis";
 import {useNavigate} from "react-router-dom";
-import Filter from '../../../components/Filter'
+import { toast } from 'react-toastify';
 import ListData from "../../../components/ListData";
+import {Typography, Card} from "@mui/material";
+import { addCompany } from "../../../redux2/reducers/CompanySlice";
+import { useSelector, useDispatch } from 'react-redux';
 import {Link} from "react-router-dom";
+import Filter from '../../../components/Filter'
 
 
-const UsersList = () => {
 
-    const usersListData = useSelector(state => state.usersList.users)
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+const ListCompanies = () => {
+
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
-    const [filteredData, setFilteredData] = useState(null)
-    const [filteredResult, setFilteredResult] = useState(null)
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const CompaniesData = useSelector(state => state.Company.companiesData) 
+       const [filteredResult, setFilteredResult] = useState(null)
 
 
-    const getUsersDataFun = async (Token, refreshVal) => {
+    const getCompaniesDataFun = async (Token, refreshVal) => {
 
         try{
-            await AuthAxios().usersList(Token, refreshVal)
+            await AxiosApis().getCompanyData(Token, refreshVal)
+
             .then((data) => {
 
                 if(data === false)
@@ -36,8 +34,8 @@ const UsersList = () => {
                     return false
                 }
 
-                dispatch(addUsers(data))
-            }) 
+                dispatch(addCompany(data))
+            })
         }
         catch(error){
             console.log("list error =" ,error);
@@ -54,29 +52,28 @@ const UsersList = () => {
         }
     }
 
-
     useEffect( async ()=>{
-        if(usersListData === null)
+        if(CompaniesData === null)
         {
-            getUsersDataFun(localStorageToken, localStorageRefresh)
+            getCompaniesDataFun(localStorageToken, localStorageRefresh)
         }
     },[])
+
 
     const DeleteFun = async (id) => {
         try
         {
-            await AuthAxios().deleteUser(id, localStorageToken, localStorageRefresh)
+            await AxiosApis().deleteCompany(id, localStorageToken, localStorageRefresh)
             .then((res) => {
-
                 if(res === false)
                 {
                     navigate("/user/login");
                     return false
                 }
 
-                getUsersDataFun(localStorageToken, localStorageRefresh)
+                getCompaniesDataFun(localStorageToken, localStorageRefresh)
 
-                toast.success("The user has been Deleted",{
+                toast.success("The Company Has Been Deleted",{
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -103,39 +100,47 @@ const UsersList = () => {
         }
     }
 
+
     return (
         <React.Fragment>
             <Typography variant={'h2'} mb={3}>
                 {/* Users2 */}
             </Typography>
 
-            <Filter setFilteredResult={setFilteredResult}  reduxData={usersListData}/>
+            <Filter setFilteredResult={setFilteredResult} reduxData={CompaniesData} />
      
             {/* data without filtering */}
-            { filteredResult === null ? (
-                (usersListData && usersListData !== null) ?
-                usersListData.map((users, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/list-views/users/edit/${users.id}`}>
-                        <ListData Data={users} key={index}  DeleteFun={DeleteFun} />
-                        {/* // <UserItem userData={users} key={index}  DeleteFun={DeleteFun}/> */}
+            { 
+            filteredResult === null ? (
+                (CompaniesData && CompaniesData !== null) ?
+                CompaniesData.map((company, index) => (
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Companies/edit/${company.id}`}>
+                        <ListData Data={company} 
+                         DeleteFun={DeleteFun}
+                         key={index}
+                        />
                     </Link>
+                    
                 ))
             :null
 
              ) : 
             //   data with filtering 
               filteredResult !== null ?
-                filteredResult.map((users, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/list-views/users/edit/${users.id}`}>
-                        <ListData Data={users} key={index}  DeleteFun={DeleteFun} />
-                        {/* // <UserItem userData={users} key={index}  DeleteFun={DeleteFun}/> */}
+                filteredResult.map((company, index) => (
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Companies/edit/${company.id}`}>
+                        <ListData Data={company} 
+                         DeleteFun={DeleteFun}
+                         key={index}
+                        />
                     </Link>
                 ))
                 
             :null
             }
         </React.Fragment>
-    );
-};
+    )
+}
 
-export default UsersList;
+
+export default ListCompanies

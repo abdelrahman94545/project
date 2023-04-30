@@ -11,6 +11,7 @@ const Form = ({
     data, 
     location, 
     handleSubmit, 
+    formFeilds,
     passChange, 
     passValidation,
     // errorText,
@@ -33,7 +34,7 @@ const Form = ({
                 <CardContent>
                     {/* <Typography variant="h6" color={"text.secondary"}>Send Message</Typography> */}
                     <Typography component={"h2"}  variant="h1" mb={3}>
-                        {location.pathname.includes("edit") ? "Edit Account Type" : "Create Account Type"} 
+                        {location.pathname.includes("edit") ? "Edit Company" : "Create Company"} 
                         </Typography>
                         {/* {data && ( */}
                     <Box component="form"
@@ -53,25 +54,19 @@ const Form = ({
                         autoComplete="off"
                         onSubmit={handleSubmit}
                     >
-                        
-                        <FormControl>
+                        {formFeilds.map((feildName, index)=>(
+                           <FormControl key={index}>
                             <TextField
                                 fullWidth
-                                id="name"
-                                label="Name"
-                                // defaultValue="First name"
-                                // defaultValue={data && (data.first_name)}
-                                // value={data !== null && (data.first_name)}
-                                
-                                defaultValue={data  ? (data.name) : null}
-                                name="name"
+                                id={feildName}           
+                                label={(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}             
+                                defaultValue={data  ? (data[feildName]) : null}
+                                name={feildName}
                             />
-                        </FormControl>
-                      
-                       
-            
+                            </FormControl>
+                        ))}
                         <Div sx={{mx: 1}}>
-                            <Button disabled={passValidation} variant={"contained"} type="submit">Create</Button>
+                            <Button  variant={"contained"} type="submit">Create</Button>
                         </Div>
                     </Box>
                      {/* )} */}

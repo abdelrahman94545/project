@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import AxiosApis from "../../../services/AxiosApis";
 import {useNavigate} from "react-router-dom";
 import { toast } from 'react-toastify';
@@ -7,6 +7,7 @@ import {Typography, Card} from "@mui/material";
 import { addAccountType } from "../../../redux2/reducers/AccountTypeSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import {Link} from "react-router-dom";
+import Filter from '../../../components/Filter'
 
 
 
@@ -17,14 +18,12 @@ const ListAccountType = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const accountTypeData = useSelector(state => state.accountType.accountTypeData)
+    const [filteredResult, setFilteredResult] = useState(null)
 
 
     const getAccountTypeDataFun = async (Token, refreshVal) => {
 
         try{
-            // console.log("axios =", AuthAxios().usersList());
-            // if(usersListData === null)
-            // {
             await AxiosApis().listAccountType(Token, refreshVal)
 
             .then((data) => {
@@ -37,7 +36,6 @@ const ListAccountType = () => {
 
                 dispatch(addAccountType(data))
             })
-            // }
            
         }
         catch(error){
@@ -111,11 +109,11 @@ const ListAccountType = () => {
                 {/* Users2 */}
             </Typography>
 
-            {/* <Filter setFilteredResult={setFilteredResult} /> */}
+            <Filter setFilteredResult={setFilteredResult} reduxData={accountTypeData} />
      
             {/* data without filtering */}
             { 
-            // filteredResult === null ? (
+            filteredResult === null ? (
                 (accountTypeData && accountTypeData !== null) ?
                 accountTypeData.map((types, index) => (
                     <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
@@ -128,14 +126,19 @@ const ListAccountType = () => {
                 ))
             :null
 
-            //  ) : 
+             ) : 
             //   data with filtering 
-            //   filteredResult !== null ?
-            //     filteredResult.map((users, index) => (
-            //         <UserItem userData={users} key={index}  DeleteFun={DeleteFun}/>
-            //     ))
+              filteredResult !== null ?
+                filteredResult.map((types, index) => (
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
+                        <ListData Data={types} 
+                         DeleteFun={DeleteFun}
+                         key={index}
+                        />
+                    </Link>
+                ))
                 
-            // :null
+            :null
             }
         </React.Fragment>
     )

@@ -75,7 +75,7 @@ const UserItem = ({userData, DeleteFun}) => {
                         display: {xs: 'none', md: 'block'}
                     }}
                 >
-                    <Typography variant={"h6"} mt={1} lineHeight={1.25}>{userData.get_company}</Typography>
+                    <Typography variant={"h6"} mt={1} lineHeight={1.25}>{userData.get_role}</Typography>
                     {/* <Typography variant={"h6"} mt={1} lineHeight={1.25}>{user.title}</Typography> */}
                 </Item>
                 <Item
@@ -85,9 +85,10 @@ const UserItem = ({userData, DeleteFun}) => {
                         display: {xs: 'none', md: 'block'}
                     }}
                 >
-                    <Typography variant={"h6"} mt={1} lineHeight={1.25}>{userData.get_role}</Typography>
+                    <Typography variant={"h6"} mt={1} lineHeight={1.25}>{userData.get_company}</Typography>
                     {/* <Typography variant={"h6"} mt={1} lineHeight={1.25}>{user.title}</Typography> */}
                 </Item>
+                
                 {/* <Item
                     sx={{
                         flexBasis: '30%',

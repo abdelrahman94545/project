@@ -8,37 +8,39 @@ import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import {useTranslation} from "react-i18next";
 
-import AuthAxios from "../../../../services/auth-axios";
+import AxiosApis from "../../../services/AxiosApis";
 import { toast } from 'react-toastify';
 import { useLocation, useParams, useNavigate, useSearchParams  } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import Form from "../Form/Form"; 
-import { addUsers } from "../../../../redux2/reducers/usersListSlice";
+import { useDispatch } from 'react-redux';
+import Form from "../../../components/Form/Form";
+// import Form from "./Form/Form";
+import { addCompany } from "../../../redux2/reducers/CompanySlice";
 
 
-const CreateUser = () => {
+
+const CreateCompany = () => {
     const location = useLocation();
     const params = useParams();
     const navigate = useNavigate();
-    const userDataStored = useSelector(state => state.usersList.users)
     const dispatch = useDispatch();
 
     const [data , setData] = useState(null) 
-    const [passValidation , setPassValidation] = useState(false)
-    const [passwordVal , setPasswordVal] = useState({password: "" , confirm_password: ""})
+    const [formFeildsArr , setFormFeildsArr] = useState(["name","admin_user_limit","system_user_limit","create_by"]) 
+    // const [passValidation , setPassValidation] = useState(false)
 
-    const [errorText , setErrorText] = useState("Password and Confirm Password Dose not Match")
+
+    // const [errorText , setErrorText] = useState("Password and Confirm Password Dose not Match")
     const Token = localStorage.getItem('token')
     const Refresh = localStorage.getItem('refresh')
 
     
+    // call data which i need to edit it
     useEffect(async ()=>{
-
         if(location.pathname.includes("edit"))
         {
             try
             {
-                await AuthAxios().getEditUser(params.id, Token, Refresh)
+                await AxiosApis().getEditCompanyData(params.id, Token, Refresh)
                 .then(res => {
                     if(res === false)
                         {
@@ -66,65 +68,15 @@ const CreateUser = () => {
 
 
 
-    const passChange = (e) =>{
-
-            setPasswordVal((prevState) => ({
-                ...prevState,
-                [e.target.name]: e.target.value
-            }))
-
-        if(e.target.name === "confirm_password")
-        {
-            if(e.target.value !== passwordVal["password"])
-            {
-                setPassValidation(true)
-            }
-            else
-            {
-                setPassValidation(false)
-            }
-        }
-
-        if(e.target.name === "password")
-        {
-            if(e.target.value !== passwordVal["confirm_password"])
-            {
-                setPassValidation(true)
-            }
-            else
-            {
-                setPassValidation(false)
-            }
-        }
-    }
- 
-
-    const checkboxChange = (e) => {
-        setData((prevState) => ({
-            ...prevState,
-            [e.target.name]: e.target.checked
-        }))
-    }
-
-
-
     const  handleSubmit  = async (e) =>{
         e.preventDefault()
 
-    let userData = {}
+    let companyData = {}
 
         Array.from(e.target).forEach(element => {
             if(element.name  && element.value)
             {
-                if(element.name === "is_active" || element.name === "is_staff" || element.name === "is_admin")
-                {
-                    userData[element.name] = element.checked
-                }
-                else if(element.name !== "confirm_password")
-                {
-                    userData[element.name] = element.value
-                }
-                
+                companyData[element.name] = element.value
             }
           });
 
@@ -134,7 +86,7 @@ const CreateUser = () => {
             {
                 try
                 {
-                    await AuthAxios().editUser(params.id ,userData, Token, Refresh)
+                    await AxiosApis().editCompanyData(params.id ,companyData, Token, Refresh)
                     .then( async (res) => {
 
                         if(res === false)
@@ -143,25 +95,15 @@ const CreateUser = () => {
                             return false
                         }
 
-                        toast.success("The user has been Edited",{
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
                             try{
-                                await AuthAxios().usersList(Token, Refresh)
+                                await AxiosApis().getCompanyData(Token, Refresh)
                                 .then((data) => {
                                     if(data === false)
                                     {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addUsers(data))
+                                    dispatch(addCompany(data))
                                 })
                             }
                             catch(error){
@@ -177,11 +119,24 @@ const CreateUser = () => {
                                 });
                             }
 
-                        navigate("/list-views/users"); 
+                        toast.success("The Company Has Been Edited",{
+                            position: "top-center",
+                            autoClose: 3000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+
+                        navigate("/dashboards/listCompanies"); 
+
                     });
                 }
                 catch(error)
                 {
+
                     toast.error("Network Error",{
                         position: "top-center",
                         autoClose: 3000,
@@ -196,10 +151,10 @@ const CreateUser = () => {
             }
             else
             {
-                // create New user
+                // create New Account Type
                 try
                 {
-                    await AuthAxios().createUser(userData, Token, Refresh)
+                    await AxiosApis().createCompany(companyData, Token, Refresh)
                     .then(async (data) => {
 
                         if(data === false)
@@ -209,14 +164,14 @@ const CreateUser = () => {
                         }
 
                             try{
-                                await AuthAxios().usersList(Token, Refresh)
+                                await AxiosApis().getCompanyData(Token, Refresh)
                                 .then((data) => {
                                     if(data === false)
                                     {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addUsers(data))
+                                    dispatch(addCompany(data))
                                 })
                             }
                             catch(error){
@@ -234,7 +189,7 @@ const CreateUser = () => {
                         
 
 
-                        toast.success("The user has been created",{
+                        toast.success("The Campany Has Been Created",{
                             position: "top-center",
                             autoClose: 3000,
                             hideProgressBar: false,
@@ -248,33 +203,16 @@ const CreateUser = () => {
                 }
                 catch(error)
                 {
-
-                    if( error.response && error.response.data.email )
-                    {
-                        toast.error(error.response.data.email[0],{
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
-                    }
-                    else
-                    {
-                            toast.error("Network Error",{
-                            position: "top-center",
-                            autoClose: 3000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                        });
-                    }
+                    toast.error("Network Error",{
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
                 }
         }
     }
@@ -288,17 +226,15 @@ const CreateUser = () => {
                 data={data}  
                 location={location} 
                 handleSubmit={handleSubmit}
-                passChange={passChange}
-                passValidation={passValidation}
-                errorText={errorText}
-                checkboxChange={checkboxChange}
+                formFeilds={formFeildsArr}
                 />
             )}
 
-            {(location.pathname.includes("createUser") ) && (
+            {(location.pathname.includes("createCompanies") ) && (
                 <Form  
                 location={location} 
                 handleSubmit={handleSubmit}
+                formFeilds={formFeildsArr}
                 />
             )}
         </div>
@@ -307,4 +243,4 @@ const CreateUser = () => {
 }
 
 
-export default CreateUser;
+export default CreateCompany;

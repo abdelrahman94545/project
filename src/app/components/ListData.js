@@ -62,12 +62,36 @@ const ListData = ({Data, DeleteFun}) => {
                             </Badge>
                         </Item>
                             <Item>
-                                <Typography variant={"h6"} mb={.5}>{`${Data.name}`}</Typography>
-                                {/* <Typography variant={"body1"} color="text.secondary">{Data.email}</Typography>           */}
+                                <Typography variant={"h6"} mb={.5}>{Data.name ? Data.name : Data.full_name ? Data.full_name : null}</Typography>
+                                {Data.email ? (
+                                    <Typography variant={"body1"} color="text.secondary">{Data.email}</Typography>
+                                ) : null}
                             </Item>
                     </Stack>
                 </Item>
                 {/* </Link> */}
+
+                {Object.keys(Data).map((itemData, index)=>(
+                   
+                    itemData !== "name" 
+                    && itemData !== "full_name" 
+                    && itemData !== "id" 
+                    && itemData !== "email" 
+                    && itemData !== "user" 
+                    && Data[itemData] !== null ? 
+                        <Item
+                        key={index}
+                        sx={{
+                            alignSelf: 'flex-start',
+                            flexBasis: {md: '28%', lg: '18%'},
+                            display: {xs: 'none', md: 'block'}
+                        }}
+                        >
+                            <Typography variant={"h6"} mt={1} lineHeight={1.25}>{Data[itemData].toString()}</Typography>
+                        </Item>
+                  :null
+                   
+                ))}
                 
               
 

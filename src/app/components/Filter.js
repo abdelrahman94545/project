@@ -8,22 +8,22 @@ import Button from "@mui/material/Button";
 
 
 
-const Filter = ({setFilteredResult}) => {
+const Filter = ({setFilteredResult, reduxData}) => {
 
     const [filteredData, setFilteredData] = useState(null)
-    // const [filterFields, setFilterFields] = useState(null)
-    const usersListData = useSelector(state => state.usersList.users)
+    const [filterFields, setFilterFields] = useState(null)
+    // const usersListData = useSelector(state => state.usersList.users)
 
 
-    // call filter on change
-    useEffect(()=>{
+     // call filter on change
+     useEffect(()=>{
         if(filteredData !== null)
         {
             const keys = Object.keys(filteredData);
             const values = Object.values(filteredData);
-            const result = usersListData.filter((user) => {
+            const result = reduxData.filter((filterItem) => {
                 return keys.every((key) => {
-                return values.some(() => user[key].toLowerCase().includes(filteredData[key].toLowerCase()))
+                return values.some(() => filterItem[key]?.toString().toLowerCase().includes(filteredData[key].toLowerCase()))
             })
           })
 
@@ -32,17 +32,44 @@ const Filter = ({setFilteredResult}) => {
         
     },[filteredData])
 
+    // // call filter on change
+    // useEffect(()=>{
+    //     if(filteredData !== null)
+    //     {
+    //         const keys = Object.keys(filteredData);
+    //         const values = Object.values(filteredData);
+    //         const result = usersListData.filter((user) => {
+    //             return keys.every((key) => {
+    //             return values.some(() => user[key].toLowerCase().includes(filteredData[key].toLowerCase()))
+    //         })
+    //       })
 
+    //       setFilteredResult(result)
+    //     }
+        
+    // },[filteredData])
+
+
+
+// // generate fiter feilds
+//     useEffect(()=>{
+//         if(usersListData !== null)
+//         {
+//             usersListData.filter(element => {
+//                 setFilterFields(Object.keys(element))  
+//                 })
+//         }
+//     },[usersListData])
 
 // generate fiter feilds
-    // useEffect(()=>{
-    //     if(usersListData !== null)
-    //     {
-    //         usersListData.filter(element => {
-    //             setFilterFields(Object.keys(element))  
-    //             })
-    //     }
-    // },[usersListData])
+    useEffect(()=>{
+        if(reduxData !== null)
+        {
+            reduxData.filter(element => {
+                setFilterFields(Object.keys(element))  
+                })
+        }
+    },[reduxData])
 
 
 
@@ -78,9 +105,9 @@ const Filter = ({setFilteredResult}) => {
         >
 
              {/* generate fiter feilds */}
-            {/* {filterFields && (
+            {filterFields && (
                 filterFields.map((filterField)=>(
-                    filterField !== "id" ?(
+                    filterField !== "id" && filterField !== "user" ?(
                     <Box
                     sx={{
                         m: 1,
@@ -93,17 +120,18 @@ const Filter = ({setFilteredResult}) => {
                     >
                     <TextField
                         fullWidth
-                        placeholder={filterField.replace("_", " ")}
+                        placeholder={filterField.replaceAll("_"," ").replace("get","")}
+                        // placeholder={filterField.replace("_", " ")}
                         name={filterField}
                         onChange={filterDataChangeFun}
                         type="search"
                     />
                 </Box>
                 ):null
-                )))} */}
+                )))}
 
         
-            <Box
+            {/* <Box
                 sx={{
                     m: 1,
                     maxWidth: "100%",
@@ -174,7 +202,7 @@ const Filter = ({setFilteredResult}) => {
                     onChange={filterDataChangeFun}
                     type="search"
                 />
-            </Box>
+            </Box> */}
         </Card>
     )
 }

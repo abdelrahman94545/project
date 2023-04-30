@@ -14,7 +14,7 @@ export const usersListSlice = createSlice({
                 ...state,
                 users: action.payload
             }
-        }
+        },
     }
 })
 
