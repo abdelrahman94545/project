@@ -18,13 +18,16 @@ const Form = ({
     accountType,
     passChange, 
     passValidation,
-    // errorText,
+    errorText,
     checkboxChange
     }) => {
-
-        const [companyVal, setCompanyVal] = useState("");
-        const [accountTypeVal, setAccountTypeVal] = useState("");
-   
+        
+        const [companyVal, setCompanyVal] = useState(data && data.company ? data.company : "");
+        const [accountTypeVal, setAccountTypeVal] = useState(data && data.account_type ? data.account_type : "");
+        // const [companyVal, setCompanyVal] = useState("");
+        // const [accountTypeVal, setAccountTypeVal] = useState("");
+        
+        console.log("companyVal =", companyVal);
     return(
             <React.Fragment>
                 
@@ -68,7 +71,8 @@ const Form = ({
                         && feildName !== "confirm_password" 
                         && feildName !== "is_active" 
                         && feildName !== "is_staff" 
-                        && feildName !== "is_admin" ?
+                        && feildName !== "is_admin" 
+                        && feildName !== "password" ?
                                 <FormControl key={index}>
                                 <TextField
                                     fullWidth
@@ -80,6 +84,20 @@ const Form = ({
     
                                 </FormControl>
 
+                                : (feildName === "password") ?
+
+                                    <FormControl key={index}>
+                                    <TextField
+                                        fullWidth
+                                        id={feildName}           
+                                        label={(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")} 
+                                        name={feildName}
+                                        onChange={ passChange }
+                                        helperText= {passValidation  ? errorText : ""}
+                                    />
+        
+                                    </FormControl>
+
                                 : (feildName === "company") ?
                             
                                  <FormControl  key={index}>
@@ -88,18 +106,15 @@ const Form = ({
                                     labelId="demo-simple-select-helper-label"
                                     id="demo-simple-select-helper"
                                     // value={age}
-                                    value={data  ? (data.company) : companyVal}
+                                    value={companyVal}
+                                    // value={data  ? (data.company) : companyVal}
                                     label="Company"
                                     name={feildName}
                                     onChange={(event) => setCompanyVal(event.target.value)}
                                 >
                                     {Companies !== null ? Companies.map((company,index)=>(
-                                        // console.log("company =", company),
                                         <MenuItem key={index} value={company.id}>{company.name}</MenuItem>
                                     )): null}
-                                    
-                                    {/* <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem> */}
                                 </Select>
                                 </FormControl> 
 
@@ -112,7 +127,8 @@ const Form = ({
                                         id="demo-simple-select-helper"
                                         // value={age}
                                         // value={accountTypeVal}
-                                        value={data  ? (data.account_type) : accountTypeVal}
+                                        value={accountTypeVal}
+                                        // value={data  ? (data.account_type) : accountTypeVal}
                                         label="Account type"
                                         name={feildName}
                                         onChange={(event) => setAccountTypeVal(event.target.value)}
@@ -130,8 +146,10 @@ const Form = ({
                                     fullWidth
                                     id={feildName}           
                                     label={(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}             
-                                    defaultValue={data  ? (data[feildName]) : null}
+                                    // defaultValue={data  ? (data[feildName]) : null}
                                     name={feildName}
+                                    helperText= {passValidation? errorText : ""}
+                                    onChange={passChange}
                                 />
     
                                 </FormControl>
@@ -153,7 +171,7 @@ const Form = ({
 
 
                         <Div sx={{mx: 1}}>
-                            <Button  variant={"contained"} type="submit">Create</Button>
+                            <Button disabled={passValidation ? passValidation : null}  variant={"contained"} type="submit">Create</Button>
                         </Div>
                     </Box>
                      {/* )} */}

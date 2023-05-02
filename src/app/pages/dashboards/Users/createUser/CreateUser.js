@@ -304,6 +304,7 @@ const CreateUser = () => {
                 errorText={errorText}
                 checkboxChange={checkboxChange}
                 formFeilds={formFeildsArr}
+                formName="Company"
                 />
             )}
 
@@ -312,6 +313,7 @@ const CreateUser = () => {
                 location={location} 
                 handleSubmit={handleSubmit}
                 formFeilds={formFeildsArr}
+                formName="Company"
                 />
             )}
         </div>
