@@ -9,11 +9,13 @@ import MiscDashboard from "../pages/dashboards/misc/MiscDashboard";
 import Page from "@jumbo/shared/Page";
 
 import CreateUser from "../pages/dashboards/Users/createUser/CreateUser";
-import UsersList from "../pages/list-views/UsersList";
+import UsersList from "../pages/dashboards/Users/UsersList";
 import ListAccountType from "../pages/dashboards/AccountType/ListAccountType";
 import CreateAccountType from "../pages/dashboards/AccountType/CreateAccountType";
 import ListCompanies from "../pages/dashboards/Companies/ListCompanies";
 import CreateCompany from "../pages/dashboards/Companies/CreateCompany";
+import ListAccount from "../pages/dashboards/Account/ListAccount";
+import CreateAccount from "../pages/dashboards/Account/CreateAccount";
 
 const adminRoutes = [
    
@@ -46,12 +48,24 @@ const adminRoutes = [
         element: <Page component={ListCompanies} />,   
     },
     {
-        path: "/dashboards/createCompanies",
+        path: "/dashboards/createCompany",
         element: <Page component={CreateCompany} />,   
     },
     {
         path: "/dashboards/Companies/edit/:id",
         element: <Page component={CreateCompany} />,   
+    },
+    {
+        path: "/dashboards/listAccounts",
+        element: <Page component={ListAccount} />,   
+    },
+    {
+        path: "/dashboards/createAccount",
+        element: <Page component={CreateAccount} />,   
+    },
+    {
+        path: "/dashboards/Account/edit/:id",
+        element: <Page component={CreateAccount} />,   
     },
 ];
 

@@ -1,5 +1,5 @@
-import {ASSET_AVATARS} from "../../../utils/constants/paths";
-import {getAssetPath} from "../../../utils/appHelpers";
+import {ASSET_AVATARS} from "../../../../utils/constants/paths";
+import {getAssetPath} from "../../../../utils/appHelpers";
 
 export const users = [
     {

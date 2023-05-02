@@ -2,21 +2,28 @@
 // import {useTranslation} from "react-i18next";
 import React, {useState, useEffect} from 'react';
 import Div from "@jumbo/shared/Div";
-import {Card, CardContent, TextField, Typography, Checkbox, FormControlLabel, FormGroup} from "@mui/material";
+import {Card, CardContent, TextField, Typography, InputLabel, Select, FormHelperText, Checkbox, FormControlLabel, FormGroup} from "@mui/material";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 
 const Form = ({
     data, 
     location, 
     handleSubmit, 
     formFeilds,
+    formName,
+    Companies,
+    accountType,
     passChange, 
     passValidation,
     // errorText,
     checkboxChange
     }) => {
+
+        const [companyVal, setCompanyVal] = useState("");
+        const [accountTypeVal, setAccountTypeVal] = useState("");
    
     return(
             <React.Fragment>
@@ -34,7 +41,7 @@ const Form = ({
                 <CardContent>
                     {/* <Typography variant="h6" color={"text.secondary"}>Send Message</Typography> */}
                     <Typography component={"h2"}  variant="h1" mb={3}>
-                        {location.pathname.includes("edit") ? "Edit Company" : "Create Company"} 
+                        {location.pathname.includes("edit") ? `Edit ${formName}` : `Create ${formName}`} 
                         </Typography>
                         {/* {data && ( */}
                     <Box component="form"
@@ -55,16 +62,96 @@ const Form = ({
                         onSubmit={handleSubmit}
                     >
                         {formFeilds.map((feildName, index)=>(
-                           <FormControl key={index}>
-                            <TextField
-                                fullWidth
-                                id={feildName}           
-                                label={(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}             
-                                defaultValue={data  ? (data[feildName]) : null}
+ 
+                           feildName !== "company" 
+                        && feildName !== "account_type" 
+                        && feildName !== "confirm_password" 
+                        && feildName !== "is_active" 
+                        && feildName !== "is_staff" 
+                        && feildName !== "is_admin" ?
+                                <FormControl key={index}>
+                                <TextField
+                                    fullWidth
+                                    id={feildName}           
+                                    label={(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}             
+                                    defaultValue={(data && feildName !== "password") ? (data[feildName]) : null}
+                                    name={feildName}
+                                />
+    
+                                </FormControl>
+
+                                : (feildName === "company") ?
+                            
+                                 <FormControl  key={index}>
+                                    <InputLabel id="demo-simple-select-helper-label">{(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-helper-label"
+                                    id="demo-simple-select-helper"
+                                    // value={age}
+                                    value={data  ? (data.company) : companyVal}
+                                    label="Company"
+                                    name={feildName}
+                                    onChange={(event) => setCompanyVal(event.target.value)}
+                                >
+                                    {Companies !== null ? Companies.map((company,index)=>(
+                                        // console.log("company =", company),
+                                        <MenuItem key={index} value={company.id}>{company.name}</MenuItem>
+                                    )): null}
+                                    
+                                    {/* <MenuItem value={20}>Twenty</MenuItem>
+                                    <MenuItem value={30}>Thirty</MenuItem> */}
+                                </Select>
+                                </FormControl> 
+
+                                :  (feildName === "account_type") ?
+
+                                <FormControl key={index}>
+                                    <InputLabel id="demo-simple-select-helper-label">{(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-helper-label"
+                                        id="demo-simple-select-helper"
+                                        // value={age}
+                                        // value={accountTypeVal}
+                                        value={data  ? (data.account_type) : accountTypeVal}
+                                        label="Account type"
+                                        name={feildName}
+                                        onChange={(event) => setAccountTypeVal(event.target.value)}
+                                    >
+                                        {accountType !== null ? accountType.map((accType,index)=>(
+                                            // console.log("accType =", accType),
+                                            <MenuItem key={index} value={accType.id}>{accType.name}</MenuItem>
+                                        )): null}
+                                    </Select>
+                                </FormControl> 
+                                
+                            : (feildName === "confirm_password" &&  location.pathname.includes("edit")) ? 
+                                <FormControl key={index}>
+                                <TextField
+                                    fullWidth
+                                    id={feildName}           
+                                    label={(feildName.charAt(0).toUpperCase() + feildName.slice(1)).replaceAll("_"," ")}             
+                                    defaultValue={data  ? (data[feildName]) : null}
+                                    name={feildName}
+                                />
+    
+                                </FormControl>
+                        : (feildName === "is_active" || feildName === "is_staff" || feildName === "is_admin" )  && (
+                            <FormGroup aria-label="position" row key={feildName}>
+                                <FormControlLabel  
+                                control={<Checkbox/>} 
+                                label={(feildName.replace("is", "").replace("_","")).charAt(0).toUpperCase() + feildName.slice(4)}
+                                value={(feildName.replace("is", "").replace("_","")).charAt(0).toUpperCase() + feildName.slice(4)}
                                 name={feildName}
-                            />
-                            </FormControl>
-                        ))}
+                                checked={  data  && (data[feildName])}
+                                // checked={  data  ? data.is_staff : false}
+                                onChange={location.pathname.includes("edit") ? checkboxChange : null}/>
+                            </FormGroup>
+                        )
+                            
+                        )
+                        )}
+
+
                         <Div sx={{mx: 1}}>
                             <Button  variant={"contained"} type="submit">Create</Button>
                         </Div>

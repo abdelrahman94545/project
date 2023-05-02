@@ -3,6 +3,7 @@ import  AuthSlice  from "../reducers/AuthSlice";
 import  usersListSlice  from "../reducers/usersListSlice";
 import  AccountTypeSlice  from "../reducers/AccountTypeSlice";
 import  CompanySlice  from "../reducers/CompanySlice";
+import  AccountSlice  from "../reducers/AccountSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     usersList: usersListSlice,
     accountType: AccountTypeSlice,
     Company: CompanySlice,
+    Account: AccountSlice,
   },
   
 })

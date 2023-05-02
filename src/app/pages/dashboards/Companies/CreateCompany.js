@@ -25,7 +25,7 @@ const CreateCompany = () => {
     const dispatch = useDispatch();
 
     const [data , setData] = useState(null) 
-    const [formFeildsArr , setFormFeildsArr] = useState(["name","admin_user_limit","system_user_limit","create_by"]) 
+    const [formFeildsArr , setFormFeildsArr] = useState(["name","admin_user_limit","system_user_limit"]) 
     // const [passValidation , setPassValidation] = useState(false)
 
 
@@ -227,14 +227,16 @@ const CreateCompany = () => {
                 location={location} 
                 handleSubmit={handleSubmit}
                 formFeilds={formFeildsArr}
+                formName="Company"
                 />
             )}
 
-            {(location.pathname.includes("createCompanies") ) && (
+            {(location.pathname.includes("createCompany") ) && (
                 <Form  
                 location={location} 
                 handleSubmit={handleSubmit}
                 formFeilds={formFeildsArr}
+                formName="Company"
                 />
             )}
         </div>

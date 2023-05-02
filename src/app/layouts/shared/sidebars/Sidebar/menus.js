@@ -111,8 +111,29 @@ export const Menus = () => {
                         icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
                     },
                     {
-                        uri: "/dashboards/createCompanies",
+                        uri: "/dashboards/createCompany",
                         label: 'Create Company',
+                        // label: 'sidebar.menuItem.createUser',
+                        type: "nav-item",
+                        icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
+                    },
+                ]
+            },
+            {
+                label: 'Accounts',
+                type: "collapsible",
+                icon: <SourceOutlinedIcon sx={{fontSize: 20}}/>,
+                children: [
+                    {
+                        uri: "/dashboards/listAccounts",
+                        label: 'List Accounts',
+                        // label: 'sidebar.menuItem.createUser',
+                        type: "nav-item",
+                        icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
+                    },
+                    {
+                        uri: "/dashboards/createAccount",
+                        label: 'Create Account',
                         // label: 'sidebar.menuItem.createUser',
                         type: "nav-item",
                         icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>

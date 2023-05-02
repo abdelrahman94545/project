@@ -73,6 +73,75 @@ const AxiosApis = () => {
     }
 
 
+    // Account Api
+    axiosApis.listAccounts = async (Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.get('/account/account/')
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.createAccount = async (accountData ,Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.post('/account/account/', accountData)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.getEditAccountData = async (Id,Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.get(`/account/account/${Id}/`)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.EditAccountData = async (Id, accountData, Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.put(`/account/account/${Id}/`, accountData)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+    axiosApis.deleteAccount = async (Id, Token, refreshVal) => {
+        const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
+        if(status === 200)
+        {
+            const {data} = await Instance.delete(`/account/account/${Id}/`)
+            return data;
+        }
+        else
+        {
+            return false
+        }
+    }
+
+
+
+
     // Company Api
     axiosApis.getCompanyData = async (Token, refreshVal) => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)

@@ -3,13 +3,13 @@ import {users} from "./data";
 import UserItem from "./UserItem";
 import {Typography, Card} from "@mui/material";
 
-import AuthAxios from "../../../services/auth-axios";
+import AuthAxios from "../../../../services/auth-axios";
 import { useSelector, useDispatch } from 'react-redux';
-import { addUsers } from "../../../redux2/reducers/usersListSlice";
+import { addUsers } from "../../../../redux2/reducers/usersListSlice";
 import { toast } from 'react-toastify';
 import {useNavigate} from "react-router-dom";
-import Filter from '../../../components/Filter'
-import ListData from "../../../components/ListData";
+import Filter from '../../../../components/Filter'
+import ListData from "../../../../components/ListData";
 import {Link} from "react-router-dom";
 
 
@@ -40,7 +40,7 @@ const UsersList = () => {
             }) 
         }
         catch(error){
-            console.log("list error =" ,error);
+            // console.log("list error =" ,error);
             toast.error("Network Error",{
                 position: "top-center",
                 autoClose: 3000,
@@ -63,6 +63,7 @@ const UsersList = () => {
     },[])
 
     const DeleteFun = async (id) => {
+        let newFilteredResult = filteredResult
         try
         {
             await AuthAxios().deleteUser(id, localStorageToken, localStorageRefresh)
@@ -75,6 +76,17 @@ const UsersList = () => {
                 }
 
                 getUsersDataFun(localStorageToken, localStorageRefresh)
+
+                // used for delete data when filter is on
+                if(newFilteredResult !== null)
+                {
+                    newFilteredResult = newFilteredResult.filter(( newData ) => {
+                        return newData.id !== id;
+                    });
+    
+                    setFilteredResult(newFilteredResult)
+                }
+                
 
                 toast.success("The user has been Deleted",{
                     position: "top-center",
@@ -90,6 +102,7 @@ const UsersList = () => {
         }
         catch(error)
         {
+            console.log("error =", error);
             toast.error("Network Error",{
                 position: "top-center",
                 autoClose: 3000,

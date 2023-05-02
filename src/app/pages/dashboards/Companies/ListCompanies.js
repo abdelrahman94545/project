@@ -38,7 +38,7 @@ const ListCompanies = () => {
             })
         }
         catch(error){
-            console.log("list error =" ,error);
+            // console.log("list error =" ,error);
             toast.error("Network Error",{
                 position: "top-center",
                 autoClose: 3000,
@@ -61,6 +61,7 @@ const ListCompanies = () => {
 
 
     const DeleteFun = async (id) => {
+        let newFilteredResult = filteredResult
         try
         {
             await AxiosApis().deleteCompany(id, localStorageToken, localStorageRefresh)
@@ -72,6 +73,16 @@ const ListCompanies = () => {
                 }
 
                 getCompaniesDataFun(localStorageToken, localStorageRefresh)
+
+                // used for delete data when filter is on
+                if(newFilteredResult !== null)
+                {
+                    newFilteredResult = newFilteredResult.filter(( newData ) => {
+                        return newData.id !== id;
+                    });
+
+                    setFilteredResult(newFilteredResult)
+                }
 
                 toast.success("The Company Has Been Deleted",{
                     position: "top-center",
@@ -115,7 +126,8 @@ const ListCompanies = () => {
                 (CompaniesData && CompaniesData !== null) ?
                 CompaniesData.map((company, index) => (
                     <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Companies/edit/${company.id}`}>
-                        <ListData Data={company} 
+                        <ListData 
+                         Data={company} 
                          DeleteFun={DeleteFun}
                          key={index}
                         />
@@ -129,7 +141,8 @@ const ListCompanies = () => {
               filteredResult !== null ?
                 filteredResult.map((company, index) => (
                     <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Companies/edit/${company.id}`}>
-                        <ListData Data={company} 
+                        <ListData 
+                         Data={company} 
                          DeleteFun={DeleteFun}
                          key={index}
                         />

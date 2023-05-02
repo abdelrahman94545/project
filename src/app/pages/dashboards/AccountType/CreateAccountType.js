@@ -223,6 +223,7 @@ const CreateAccountType = () => {
                 location={location} 
                 handleSubmit={handleSubmit}
                 formFeilds={formFeildsArr}
+                formName="AccountType"
                 />
             )}
 
@@ -231,6 +232,7 @@ const CreateAccountType = () => {
                 location={location} 
                 handleSubmit={handleSubmit}
                 formFeilds={formFeildsArr}
+                formName="AccountType"
                 />
             )}
         </div>

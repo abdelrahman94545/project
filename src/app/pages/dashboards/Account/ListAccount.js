@@ -4,27 +4,27 @@ import {useNavigate} from "react-router-dom";
 import { toast } from 'react-toastify';
 import ListData from "../../../components/ListData";
 import {Typography, Card} from "@mui/material";
-import { addAccountType } from "../../../redux2/reducers/AccountTypeSlice";
+import { addAccount } from "../../../redux2/reducers/AccountSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import {Link} from "react-router-dom";
 import Filter from '../../../components/Filter'
 
 
 
-const ListAccountType = () => {
+const ListAccount = () => {
 
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const accountTypeData = useSelector(state => state.accountType.accountTypeData)
+    const accountData = useSelector(state => state.Account.accountData)
     const [filteredResult, setFilteredResult] = useState(null)
 
 
-    const getAccountTypeDataFun = async (Token, refreshVal) => {
+    const getAccountDataFun = async (Token, refreshVal) => {
 
         try{
-            await AxiosApis().listAccountType(Token, refreshVal)
+            await AxiosApis().listAccounts(Token, refreshVal)
 
             .then((data) => {
 
@@ -34,7 +34,7 @@ const ListAccountType = () => {
                     return false
                 }
 
-                dispatch(addAccountType(data))
+                dispatch(addAccount(data))
             })
            
         }
@@ -54,9 +54,9 @@ const ListAccountType = () => {
     }
 
     useEffect( async ()=>{
-        if(accountTypeData === null)
+        if(accountData === null)
         {
-            getAccountTypeDataFun(localStorageToken, localStorageRefresh)
+            getAccountDataFun(localStorageToken, localStorageRefresh)
         }
     },[])
 
@@ -65,7 +65,7 @@ const ListAccountType = () => {
         let newFilteredResult = filteredResult
         try
         {
-            await AxiosApis().DeleteAccountType(id, localStorageToken, localStorageRefresh)
+            await AxiosApis().deleteAccount(id, localStorageToken, localStorageRefresh)
             .then((res) => {
 
                 if(res === false)
@@ -74,7 +74,7 @@ const ListAccountType = () => {
                     return false
                 }
 
-                getAccountTypeDataFun(localStorageToken, localStorageRefresh)
+                getAccountDataFun(localStorageToken, localStorageRefresh)
 
                 // used for delete data when filter is on
                 if(newFilteredResult !== null)
@@ -86,7 +86,7 @@ const ListAccountType = () => {
                     setFilteredResult(newFilteredResult)
                 }
 
-                toast.success("The Account Type Has Been Deleted",{
+                toast.success("The Account Has Been Deleted",{
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -113,22 +113,23 @@ const ListAccountType = () => {
         }
     }
 
+   
     return (
         <React.Fragment>
             <Typography variant={'h2'} mb={3}>
-                {/* Users2 */}
+                {/* Account */}
             </Typography>
 
-            <Filter setFilteredResult={setFilteredResult} reduxData={accountTypeData} />
+            <Filter setFilteredResult={setFilteredResult} reduxData={accountData}  filterKey="AccountFilter"/>
      
             {/* data without filtering */}
             { 
             filteredResult === null ? (
-                (accountTypeData && accountTypeData !== null) ?
-                accountTypeData.map((types, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
+                (accountData && accountData !== null) ?
+                accountData.map((account, index) => (
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Account/edit/${account.id}`}>
                         <ListData 
-                         Data={types} 
+                         Data={account} 
                          DeleteFun={DeleteFun}
                          key={index}
                         />
@@ -140,10 +141,10 @@ const ListAccountType = () => {
              ) : 
             //   data with filtering 
               filteredResult !== null ?
-                filteredResult.map((types, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
+                filteredResult.map((account, index) => (
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Account/edit/${account.id}`}>
                         <ListData 
-                         Data={types} 
+                         Data={account} 
                          DeleteFun={DeleteFun}
                          key={index}
                         />
@@ -157,4 +158,4 @@ const ListAccountType = () => {
 }
 
 
-export default ListAccountType
+export default ListAccount

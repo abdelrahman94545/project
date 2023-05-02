@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Typography, Card} from "@mui/material";
-import {Box} from "@mui/material";
+import {Box, FormControlLabel,Checkbox} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { useSelector, useDispatch } from 'react-redux';
 import Button from "@mui/material/Button";
@@ -8,22 +8,24 @@ import Button from "@mui/material/Button";
 
 
 
-const Filter = ({setFilteredResult, reduxData}) => {
+const Filter = ({setFilteredResult, reduxData, filterKey}) => {
 
-    const [filteredData, setFilteredData] = useState(null)
+    const [filteredData, setFilteredData] = useState(filterKey? {active: true} : null)
+    // const [filteredData, setFilteredData] = useState(null)
     const [filterFields, setFilterFields] = useState(null)
     // const usersListData = useSelector(state => state.usersList.users)
 
-
      // call filter on change
      useEffect(()=>{
-        if(filteredData !== null)
+        // if(filteredData !== null )
+        if(filteredData !== null && reduxData !== null)
         {
             const keys = Object.keys(filteredData);
             const values = Object.values(filteredData);
             const result = reduxData.filter((filterItem) => {
                 return keys.every((key) => {
-                return values.some(() => filterItem[key]?.toString().toLowerCase().includes(filteredData[key].toLowerCase()))
+                return values.some(() => filterItem[key]?.toString().toLowerCase().includes(filteredData[key]))
+                // return values.some(() => filterItem[key]?.toString().toLowerCase().includes(filteredData[key].toLowerCase()))
             })
           })
 
@@ -77,10 +79,22 @@ const Filter = ({setFilteredResult, reduxData}) => {
         let cleanFilteredData = null;
        if(e.target.value.length !== 0)
        {
-            setFilteredData((prevState) =>({
-                ...prevState,
-                [e.target.name]: e.target.value
-            }))
+            // used with filtering with checkbox in account page
+            if(e.target.name === "active")
+            {
+                setFilteredData((prevState) =>({
+                    ...prevState,
+                    [e.target.name]:  !filteredData.active
+                }))
+            }
+
+            if(e.target.name !== "active")
+            {
+                setFilteredData((prevState) =>({
+                    ...prevState,
+                    [e.target.name]: e.target.value
+                }))
+            }
        }
        else
        {
@@ -88,8 +102,6 @@ const Filter = ({setFilteredResult, reduxData}) => {
             setFilteredData(cleanFilteredData)
        }            
     }
-
-   
 
     return(
             <Card 
@@ -107,7 +119,8 @@ const Filter = ({setFilteredResult, reduxData}) => {
              {/* generate fiter feilds */}
             {filterFields && (
                 filterFields.map((filterField)=>(
-                    filterField !== "id" && filterField !== "user" ?(
+                    
+                    filterField !== "id" && filterField !== "user" && filterField !== "active" ?(
                     <Box
                     sx={{
                         m: 1,
@@ -127,7 +140,16 @@ const Filter = ({setFilteredResult, reduxData}) => {
                         type="search"
                     />
                 </Box>
-                ):null
+                ): filterField === "active" ? (
+                    <FormControlLabel 
+                    control={<Checkbox checked={filteredData.active} />} 
+                    // control={<Checkbox checked={filteredData?.active} defaultChecked/>} 
+                    label={filterField.charAt(0).toUpperCase() + filterField.slice(1)} 
+                    key={filterField}
+                    name={filterField}
+                    onChange={filterDataChangeFun}
+                    />
+                ) : null
                 )))}
 
         

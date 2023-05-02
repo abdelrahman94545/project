@@ -1,5 +1,5 @@
 import ProjectsList from "../pages/list-views/ProjectsList";
-import UsersList from "../pages/list-views/UsersList";
+import UsersList from "../pages/dashboards/Users/UsersList";
 import Page from "@jumbo/shared/Page";
 
 const listViewRoutes = [
