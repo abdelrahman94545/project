@@ -34,7 +34,7 @@ const ListAccount = () => {
                     return false
                 }
 
-                dispatch(addAccount(data))
+                dispatch(addAccount(data.results))
             })
            
         }

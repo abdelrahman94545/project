@@ -34,7 +34,7 @@ const ListCompanies = () => {
                     return false
                 }
 
-                dispatch(addCompany(data))
+                dispatch(addCompany(data.results))
             })
         }
         catch(error){

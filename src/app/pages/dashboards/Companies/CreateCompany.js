@@ -103,7 +103,7 @@ const CreateCompany = () => {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addCompany(data))
+                                    dispatch(addCompany(data.results))
                                 })
                             }
                             catch(error){
@@ -171,7 +171,7 @@ const CreateCompany = () => {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addCompany(data))
+                                    dispatch(addCompany(data.results))
                                 })
                             }
                             catch(error){

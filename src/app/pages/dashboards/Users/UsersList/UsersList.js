@@ -11,6 +11,7 @@ import {useNavigate} from "react-router-dom";
 import Filter from '../../../../components/Filter'
 import ListData from "../../../../components/ListData";
 import {Link} from "react-router-dom";
+import Table from "../Table";
 
 
 const UsersList = () => {
@@ -22,6 +23,8 @@ const UsersList = () => {
     const localStorageRefresh = localStorage.getItem('refresh')
     const [filteredData, setFilteredData] = useState(null)
     const [filteredResult, setFilteredResult] = useState(null)
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
 
     const getUsersDataFun = async (Token, refreshVal) => {
@@ -36,7 +39,8 @@ const UsersList = () => {
                     return false
                 }
 
-                dispatch(addUsers(data))
+                dispatch(addUsers(data.results))
+                // dispatch(addUsers(data))
             }) 
         }
         catch(error){
@@ -116,6 +120,7 @@ const UsersList = () => {
         }
     }
 
+console.log("usersListData =", usersListData);
     return (
         <React.Fragment>
             <Typography variant={'h2'} mb={3}>
@@ -123,6 +128,8 @@ const UsersList = () => {
             </Typography>
 
             <Filter setFilteredResult={setFilteredResult}  reduxData={usersListData}/>
+
+            {/* <Table reduxData={usersListData} page={page} setPage={setPage} rowsPerPage={rowsPerPage} setRowsPerPage={setRowsPerPage}/> */}
      
             {/* data without filtering */}
             { filteredResult === null ? (

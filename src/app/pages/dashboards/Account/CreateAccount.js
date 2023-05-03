@@ -181,7 +181,7 @@ const CreateAccount = () => {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addAccount(data))
+                                    dispatch(addAccount(data.results))
                                 })
                             }
                             catch(error){
@@ -250,7 +250,7 @@ const CreateAccount = () => {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addAccount(data))
+                                    dispatch(addAccount(data.results))
                                 })
                             }
                             catch(error){

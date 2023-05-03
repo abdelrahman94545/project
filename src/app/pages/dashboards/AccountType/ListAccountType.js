@@ -34,7 +34,7 @@ const ListAccountType = () => {
                     return false
                 }
 
-                dispatch(addAccountType(data))
+                dispatch(addAccountType(data.results))
             })
            
         }

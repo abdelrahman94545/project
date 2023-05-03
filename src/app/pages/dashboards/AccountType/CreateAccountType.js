@@ -98,7 +98,7 @@ const CreateAccountType = () => {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addAccountType(data))
+                                    dispatch(addAccountType(data.results))
                                 })
                             }
                             catch(error){
@@ -167,7 +167,7 @@ const CreateAccountType = () => {
                                         navigate("/user/login");
                                         return false
                                     }
-                                    dispatch(addAccountType(data))
+                                    dispatch(addAccountType(data.results))
                                 })
                             }
                             catch(error){
