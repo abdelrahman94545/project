@@ -7,12 +7,20 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 
-const ContactItem = ({contactItem}) => {
 
+
+const ContactItem = ({contactItem}) => {
     const navigate = useNavigate();
     const handleContactClick = () => {
         navigate(`/app/chats/contact/${contactItem?.id}`);
     };
+
+    
+
+
+
+    // console.log("contactItem =", contactItem);
+
     return (
         <List disablePadding>
             <ListItemButton component="li">
@@ -39,7 +47,7 @@ const ContactItem = ({contactItem}) => {
                     </Badge>
                 </ListItemAvatar>
                 <ListItemText
-                    onClick={handleContactClick}
+                    // onClick={handleContactClick}
                     primary={
                         <Typography
                             component="div"

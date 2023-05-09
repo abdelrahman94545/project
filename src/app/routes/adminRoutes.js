@@ -32,15 +32,15 @@ const adminRoutes = [
         element: <Page component={UsersList}/>,
     },
     {
-        path: "/dashboards/listAccountType",
+        path: "/dashboards/listChannels",
         element: <Page component={ListAccountType} />,   
     },
     {
-        path: "/dashboards/createAccountType",
+        path: "/dashboards/createChannel",
         element: <Page component={CreateAccountType} />,   
     },
     {
-        path: "/dashboards/accountType/edit/:id",
+        path: "/dashboards/Channel/edit/:id",
         element: <Page component={CreateAccountType} />,
     },
     {

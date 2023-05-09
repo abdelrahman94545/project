@@ -127,7 +127,7 @@ const CreateAccountType = () => {
                             theme: "light",
                         });
 
-                        navigate("/dashboards/listAccountType"); 
+                        navigate("/dashboards/Channels"); 
                     });
                 }
                 catch(error)
@@ -227,7 +227,7 @@ const CreateAccountType = () => {
                 />
             )}
 
-            {(location.pathname.includes("createAccountType") ) && (
+            {(location.pathname.includes("createChannel") ) && (
                 <Form  
                 location={location} 
                 handleSubmit={handleSubmit}

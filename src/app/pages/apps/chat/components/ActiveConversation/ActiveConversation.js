@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect, useState} from 'react';
 import useChatApp from "../../hooks/useChatApp";
 import ContentPlaceholder from "./ActiveConversationChat/ContentPlaceholder";
 import JumboScrollbar from "@jumbo/components/JumboScrollbar";
@@ -11,8 +11,11 @@ import {chatService} from "../../../../../services/chat-services";
 import Div from "@jumbo/shared/Div";
 import {CircularProgress, Typography} from "@mui/material";
 
+import AxiosApisChat from "../../../../../services/AxiosApisChat";
+import { toast } from 'react-toastify';
+
 const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
-    const {setActiveConversation} = useChatApp();
+    const {setActiveConversation, activeConversation} = useChatApp();
     const [queryKey, setQueryKey] = React.useState(["active-conversation"]);
     const scrollbarRef = React.useRef();
     const {chatBy, id} = useParams();
@@ -24,11 +27,66 @@ const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
     );
     const queryClient = useQueryClient();
 
+
+
+    const localStorageToken = localStorage.getItem('token')
+    const localStorageRefresh = localStorage.getItem('refresh')
+    const [chatRoomData ,setChatRoomData] = useState()
+
+    const getChatRommDataFun = async (Id,Token, refreshVal) => {
+
+        try{
+            await AxiosApisChat().getChatRoomData(Id,Token, refreshVal)
+
+            .then((data) => {
+
+                if(data === false)
+                {
+                    // navigate("/user/login");
+                    return false
+                }
+
+                setChatRoomData(data.results)
+                // dispatch(addAccount(data.results))
+            })
+           
+        }
+        catch(error){
+            // console.log("list error =" ,error);
+            toast.error("Network Error",{
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+    }
+
+    useEffect( async ()=>{
+        // if(accountData === null)
+        // {
+            if(id)
+            {
+            getChatRommDataFun(id, localStorageToken, localStorageRefresh)
+            }
+        // }
+    },[id])
+
+
+
     React.useEffect(() => {
-        setActiveConversation(conversationQuery?.conversation);
+        setActiveConversation(chatRoomData);
+        // setActiveConversation(conversationQuery?.conversation);
         if (scrollbarRef)
             scrollbarRef.current?.scrollToBottom();
-    }, [conversationQuery, scrollbarRef]);
+    }, [chatRoomData, scrollbarRef]);
+// }, [conversationQuery, scrollbarRef]);
+
+// console.log("activeConversation 1=", activeConversation);
 
     React.useEffect(() => {
         if (id) {

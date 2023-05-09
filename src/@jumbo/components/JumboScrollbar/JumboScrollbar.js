@@ -3,9 +3,14 @@ import Scrollbars from "react-custom-scrollbars-2";
 import useJumboTheme from "@jumbo/hooks/useJumboTheme";
 import PropTypes from "prop-types";
 
+import { useSelector, useDispatch } from 'react-redux';
+
 //todo - need to see how to define prop-types for this.
 
 const JumboScrollbar = React.forwardRef((props, ref) => {
+
+    const chateRooms = useSelector(state => state.Chat.rooms)
+
     const {theme} = useJumboTheme();
     const {direction, renderTrackVertical, renderTrackHorizontal, disable, ...restProps} = props;
 
@@ -37,9 +42,39 @@ const JumboScrollbar = React.forwardRef((props, ref) => {
             }}/>
     });
 
+    const handleScroll = (e) => {
+
+        const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight
+        
+        if(bottom && (props.rommsCount !== chateRooms.length) && (props.showAndHideChatLoader === false || props.showAndHideContactLoader === false))
+        {
+            if(props.tapName === "chat")
+            {
+                props.callinfinitescrollchatfun()
+                // console.log("bottom =", bottom);
+            }
+
+            if(props.tapName === "contact")
+            {
+                props.callinfinitescrollcontactsfun()
+                // console.log("bottom =", bottom);
+            }
+            
+        }
+
+        
+    }
+
+    const handleScrollStop = () => {
+        
+    }
+
+    console.log("props =", props);
+
     return (
         <Scrollbars
-
+        onScroll={handleScroll}
+        onScrollStop={handleScrollStop}
             renderView={
                 props => (<div {...props} style={
                     (theme.direction === "rtl" ? {

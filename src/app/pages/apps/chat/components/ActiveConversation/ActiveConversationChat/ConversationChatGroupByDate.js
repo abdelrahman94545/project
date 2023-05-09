@@ -14,19 +14,32 @@ const chatGroupedByDate = (array, key) =>
     }));
 const ConversationChatGroupByDate = () => {
     const {activeConversation} = useChatApp();
-    const conversationMessages = React.useMemo(() => {
-        if(activeConversation)
-            return chatGroupedByDate(activeConversation?.messages, 'sent_date');
+    // const conversationMessages = React.useMemo(() => {
+    //     if(activeConversation)
+    //         return chatGroupedByDate(activeConversation?.messages, 'sent_date');
 
-        return [];
-    }, [activeConversation]);
+    //     return [];
+    // }, [activeConversation]);
+
+
+    // console.log("activeConversation 22=", activeConversation);
     return (
         <React.Fragment>
+
             {
-                conversationMessages?.map((messagesGroupByDate, index) => (
+                activeConversation?.sort((a, b) => { return a.id - b.id })
+                .map((messagesGroupByDate, index) => (
+                    // conversationMessages?.map((messagesGroupByDate, index) => (
                     <ActiveConversationChat key={index} conversation={messagesGroupByDate}/>
                 ))
             }
+
+            {/* {
+                activeConversation?.map((messagesGroupByDate, index) => (
+                    // conversationMessages?.map((messagesGroupByDate, index) => (
+                    <ActiveConversationChat key={index} conversation={messagesGroupByDate}/>
+                ))
+            } */}
         </React.Fragment>
     );
 };

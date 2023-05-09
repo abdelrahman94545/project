@@ -19,56 +19,58 @@ import Grid from "@mui/material/Grid";
 import {CircularProgress, Typography} from "@mui/material";
 import Div from "@jumbo/shared/Div";
 
+import InfiniteScroll from 'react-infinite-scroll-component';
 
-const init = (initArgs) => {
-    return ({
-        selectedItems: [],
-        ...initArgs,
-    })
-};
 
-const jumboListReducer = (state, action) => {
-    switch (action.type) {
-        case SET_SELECTED_ITEMS:
-            return {
-                ...state,
-                selectedItems: getUpdatedSelectedItems(
-                    state.selectedItems,
-                    action.payload,
-                    state.primaryKey
-                )
-            };
+// const init = (initArgs) => {
+//     return ({
+//         selectedItems: [],
+//         ...initArgs,
+//     })
+// };
 
-        case SET_DATA:
-            return {
-                ...state,
-                data: action.payload.data,
-                totalCount: action.payload.totalCount,
-            };
+// const jumboListReducer = (state, action) => {
+//     switch (action.type) {
+//         case SET_SELECTED_ITEMS:
+//             return {
+//                 ...state,
+//                 selectedItems: getUpdatedSelectedItems(
+//                     state.selectedItems,
+//                     action.payload,
+//                     state.primaryKey
+//                 )
+//             };
 
-        case CHANGE_ACTIVE_PAGE:
-            return {
-                ...state,
-                activePage: parseInt(action.payload),
-            };
+//         case SET_DATA:
+//             return {
+//                 ...state,
+//                 data: action.payload.data,
+//                 totalCount: action.payload.totalCount,
+//             };
 
-        case SET_ITEMS_PER_PAGE:
-            return {
-                ...state,
-                itemsPerPage: parseInt(action.payload),
-                activePage: 0,
-            };
+//         case CHANGE_ACTIVE_PAGE:
+//             return {
+//                 ...state,
+//                 activePage: parseInt(action.payload),
+//             };
 
-        case SET_BULK_ACTIONS:
-            return {
-                ...state,
-                bulkActions: action.payload,
-            };
+//         case SET_ITEMS_PER_PAGE:
+//             return {
+//                 ...state,
+//                 itemsPerPage: parseInt(action.payload),
+//                 activePage: 0,
+//             };
 
-        default:
-            return state;
-    }
-};
+//         case SET_BULK_ACTIONS:
+//             return {
+//                 ...state,
+//                 bulkActions: action.payload,
+//             };
+
+//         default:
+//             return state;
+//     }
+// };
 
 const JumboList = React.forwardRef((props, ref) => {
     const {
@@ -77,74 +79,76 @@ const JumboList = React.forwardRef((props, ref) => {
         onSelectionChange, multiSelectOptions, noDataPlaceholder,
         wrapperComponent, wrapperSx, component, componentElement, sx,
         onItemsPerPageChange, isLoading, page, disableTransition,
-        view
+        view, apiData, 
+        // callInfiniteScrollFun
     } = props;
 
-    const [jumboList, setJumboList] = React.useReducer(jumboListReducer, {
-        primaryKey: primaryKey,
-        data: data,
-        totalCount: totalCount,
-        itemsPerPage: itemsPerPage,
-        itemsPerPageOptions: itemsPerPageOptions,
-        activePage: page,
-        isLoading: isLoading,
-        multiSelectOptions: multiSelectOptions,
-        bulkActions: null
-    }, init);
+    // const [jumboList, setJumboList] = React.useReducer(jumboListReducer, {
+    //     primaryKey: primaryKey,
+    //     data: data,
+    //     totalCount: totalCount,
+    //     itemsPerPage: itemsPerPage,
+    //     itemsPerPageOptions: itemsPerPageOptions,
+    //     activePage: page,
+    //     isLoading: isLoading,
+    //     multiSelectOptions: multiSelectOptions,
+    //     bulkActions: null
+    // }, init);
 
-    const setActivePage = React.useCallback((pageNumber) => {
-        setJumboList({type: CHANGE_ACTIVE_PAGE, payload: pageNumber});
-    }, [setJumboList]);
+    // const setActivePage = React.useCallback((pageNumber) => {
+    //     setJumboList({type: CHANGE_ACTIVE_PAGE, payload: pageNumber});
+    // }, [setJumboList]);
 
-    if (data.length === 0 && totalCount > 0 && jumboList.activePage > 0) {
-        setActivePage(jumboList.activePage - 1);
-    }
+    // if (data.length === 0 && totalCount > 0 && jumboList.activePage > 0) {
+    //     setActivePage(jumboList.activePage - 1);
+    // }
 
-    const setItemsPerPage = React.useCallback((value) => {
-        setJumboList({type: SET_ITEMS_PER_PAGE, payload: value});
-    }, [setJumboList]);
+    // const setItemsPerPage = React.useCallback((value) => {
+    //     setJumboList({type: SET_ITEMS_PER_PAGE, payload: value});
+    // }, [setJumboList]);
 
-    const setSelectedItems = React.useCallback((itemsData) => {
-        setJumboList({type: SET_SELECTED_ITEMS, payload: itemsData});
-    }, [setJumboList]);
+    // const setSelectedItems = React.useCallback((itemsData) => {
+    //     setJumboList({type: SET_SELECTED_ITEMS, payload: itemsData});
+    // }, [setJumboList]);
 
-    const setBulkActions = React.useCallback((bulkActions) => {
-        setJumboList({type: SET_BULK_ACTIONS, payload: bulkActions ?? []})
-    }, []);
+    // const setBulkActions = React.useCallback((bulkActions) => {
+    //     setJumboList({type: SET_BULK_ACTIONS, payload: bulkActions ?? []})
+    // }, []);
 
-    React.useEffect(() => {
-        setJumboList({type: SET_DATA, payload: {data: data, totalCount: totalCount}});
-    }, [data]);
+    // React.useEffect(() => {
+    //     setJumboList({type: SET_DATA, payload: {data: data, totalCount: totalCount}});
+    // }, [data]);
 
-    const jumboListContextValue = React.useMemo(() => ({
-        ...jumboList,
-        setActivePage,
-        setSelectedItems,
-        setBulkActions,
-        setItemsPerPage
-    }), [jumboList]);
+    // const jumboListContextValue = React.useMemo(() => ({
+    //     ...jumboList,
+    //     setActivePage,
+    //     setSelectedItems,
+    //     setBulkActions,
+    //     setItemsPerPage
+    // }), [jumboList]);
 
-    React.useEffect(() => {
-        onSelectionChange(jumboList.selectedItems);
-    }, [jumboList.selectedItems]);
+    // React.useEffect(() => {
+    //     onSelectionChange(jumboList.selectedItems);
+    // }, [jumboList.selectedItems]);
 
-    React.useEffect(() => {
-        onPageChange(jumboList.activePage);
-    }, [jumboList.activePage]);
+    // React.useEffect(() => {
+    //     onPageChange(jumboList.activePage);
+    // }, [jumboList.activePage]);
 
-    React.useEffect(() => {
-        onItemsPerPageChange(jumboList.itemsPerPage)
-    }, [jumboList.itemsPerPage]);
+    // React.useEffect(() => {
+    //     onItemsPerPageChange(jumboList.itemsPerPage)
+    // }, [jumboList.itemsPerPage]);
 
-    React.useImperativeHandle(ref, () => ({
-        resetSelection() {
-            setSelectedItems([]);
-        },
-    }), []);
+    // React.useImperativeHandle(ref, () => ({
+    //     resetSelection() {
+    //         setSelectedItems([]);
+    //     },
+    // }), []);
 
     if (isLoading) {
         return (
-            <JumboListContext.Provider value={jumboListContextValue}>
+            <JumboListContext.Provider >
+            {/* <JumboListContext.Provider value={jumboListContextValue}> */}
                 <JumboListWrapper component={wrapperComponent} sx={wrapperSx}>
                     <Div
                         sx={{
@@ -166,19 +170,36 @@ const JumboList = React.forwardRef((props, ref) => {
 
     const componentProps = componentElement ? {component: componentElement} : {};
     const ListComponent = component ? component : List;
+
+
+
+    // const box = document.getElementById('scrollableDiv')
+
+    // box.addEventListener('scroll', (e) => {
+    //     const scrollableHeight = box.scrollHeight - box.clientHeight
+
+    //     if (box.scrollTop >= scrollableHeight) {
+    //         console.log('User has scrolled to the bottom of this section!')
+    //     }
+    // })
+
+    console.log("apiData2 =",apiData);
     return (
-        <JumboListContext.Provider value={jumboListContextValue}>
-            <JumboListWrapper component={wrapperComponent} sx={wrapperSx}>
+        <JumboListContext.Provider value="">
+        {/* <JumboListContext.Provider value={jumboListContextValue}> */}
+            <JumboListWrapper component={wrapperComponent} sx={wrapperSx} >
                 {header}
                 {toolbar}
                 {
-                    data?.length <= 0 && !isLoading &&
+                    apiData === null  &&
+                    // data?.length <= 0 && !isLoading &&
                     <JumboListNoDataPlaceholder>
                         {noDataPlaceholder}
                     </JumboListNoDataPlaceholder>
                 }
                 {
-                    data.length > 0 && view === "list" &&
+                    apiData && view === "list" &&
+                    // data.length > 0 && view === "list" &&
                     <ListComponent {...componentProps} disablePadding sx={{...sx}}>
                         {
                             disableTransition ?
@@ -188,20 +209,78 @@ const JumboList = React.forwardRef((props, ref) => {
                                     </React.Fragment>
                                 ))
                                 :
-                                <TransitionGroup>
+                                <TransitionGroup >
+
+
+                                   
+                                        {/* <InfiniteScroll
+                                                // dataLength={apiData.length}
+                                                // next={callInfiniteScrollFun}
+                                                // hasMore={true}
+                                                // loader={<h4>Loading...</h4>}
+                                                // scrollableTarget="scrollableDiv"
+
+
+                                                dataLength={apiData.length}
+                                                next={callInfiniteScrollFun}
+                                                style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+                                                // inverse={true} //
+                                                // hasMore={true}
+                                                loader={<h4>Loading...</h4>}
+                                                scrollableTarget="scrollableDiv"
+                                            >
+                                                {
+                                                    apiData ? 
+                                                    apiData.map((row) => (
+                                                    <Collapse key={`${row[primaryKey]}`}>
+                                                        {renderItem(row)}
+                                                    </Collapse>
+                                                ))
+                                                : null
+                                                }
+                                            </InfiniteScroll> */}
+
+                                            {
+                                                apiData ? 
+                                                apiData.map((row) => (
+                                                //    console.log("row22 =",row),
+                                                   <Collapse key={`${row[primaryKey]}`}>
+                                                       {renderItem(row)}
+                                                   </Collapse>
+                                               ))
+                                               : null
+                                            }
+
+                                           
+                                   
+
                                     {
-                                        data.map((row) => (
-                                            <Collapse key={`${row[primaryKey]}`}>
-                                                {renderItem(row)}
-                                            </Collapse>
-                                        ))
+                                        // old templet data
+                                        // data.map((row) => (
+                                        //     console.log("row =",row),
+                                        //     console.log("primaryKey =",primaryKey),
+                                        //     <Collapse key={`${row[primaryKey]}`}>
+                                        //         {renderItem(row)}
+                                        //     </Collapse>
+                                        // ))
+
+                                        // apiData ? 
+                                        //  apiData.map((row) => (
+                                        //     console.log("row =",row),
+                                        //     console.log("primaryKey =",primaryKey),
+                                        //     <Collapse key={`${row[primaryKey]}`}>
+                                        //         {renderItem(row)}
+                                        //     </Collapse>
+                                        // ))
+                                        // : null
                                     }
                                 </TransitionGroup>
                         }
                     </ListComponent>
                 }
                 {
-                    data.length > 0 && view === "grid" &&
+                    apiData && view === "grid" &&
+                    // data.length > 0 && view === "grid" &&
                     <Grid container spacing={3} sx={sx}>
                         {
                             data.map(row => (
@@ -236,7 +315,7 @@ JumboList.propTypes = {
     header: PropTypes.node,
     toolbar: PropTypes.node,
     footer: PropTypes.node,
-    data: PropTypes.array.isRequired,
+    // data: PropTypes.array.isRequired,
     primaryKey: PropTypes.string.isRequired,
     renderItem: PropTypes.func.isRequired,
     totalCount: PropTypes.number,

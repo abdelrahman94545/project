@@ -4,6 +4,7 @@ import  usersListSlice  from "../reducers/usersListSlice";
 import  AccountTypeSlice  from "../reducers/AccountTypeSlice";
 import  CompanySlice  from "../reducers/CompanySlice";
 import  AccountSlice  from "../reducers/AccountSlice";
+import  chatSlice  from "../reducers/chatSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     accountType: AccountTypeSlice,
     Company: CompanySlice,
     Account: AccountSlice,
+    Chat: chatSlice
   },
   
 })

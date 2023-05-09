@@ -7,12 +7,21 @@ import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import {useNavigate} from "react-router-dom";
 
+import useChatApp from "../../hooks/useChatApp";
+
 const ConversationItem = ({conversationItem}) => {
+
+    const {setUserActiveConversationData} = useChatApp();
 
     const navigate = useNavigate();
     const handleConversationClick = () => {
         navigate(`/app/chats/conversation/${conversationItem?.id}`);
+
+
+        setUserActiveConversationData(conversationItem);
     };
+
+    // console.log("conversationItem =", conversationItem);
     return (
         <List disablePadding>
             <ListItemButton component="li">
@@ -47,7 +56,8 @@ const ConversationItem = ({conversationItem}) => {
                             justifyContent: 'space-between'
                         }}>
                             <Typography variant="h6" mb={.5}
-                                        fontSize={15}>{conversationItem?.contact?.name}</Typography>
+                                        fontSize={15}>{conversationItem.name}</Typography>
+                                        {/* fontSize={15}>{conversationItem?.contact?.name}</Typography> */}
                         </Typography>
                     }
                     secondary={

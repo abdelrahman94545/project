@@ -4,7 +4,16 @@ import Chip from "@mui/material/Chip";
 import SentMessageContent from "./SentMessageContent";
 import ReceivedMessageContent from "./ReceivedMessageContent";
 
+import moment from 'moment';
+// import useChatApp from "../../../hooks/useChatApp";
+// import useChatApp from "../../hooks/useChatApp";
+
 const ActiveConversationChat = ({conversation}) => {
+
+    // const {userActiveConversationData} = useChatApp();
+// console.log("conversation =", conversation);
+
+
     return (
         <React.Fragment>
             <Div sx={{
@@ -25,7 +34,9 @@ const ActiveConversationChat = ({conversation}) => {
                 },
             }}>
                 <Chip
-                    label={conversation?.sent_date}
+                    label={moment(conversation?.timestamp).format('DD MMMM')}
+                    // label={conversation?.timestamp}
+                    // label={conversation?.sent_date}
                     variant="outlined"
                     sx={{
                         position: 'relative',
@@ -36,12 +47,29 @@ const ActiveConversationChat = ({conversation}) => {
                     }}
                 />
             </Div>
+
             {
-                conversation?.messages?.map((message, index) => {
+                
+                        <React.Fragment >
+                            {
+                                conversation.method === "Send" ? (
+                                    // console.log("in =", message),
+                                    <SentMessageContent message={conversation}/>
+                                ) : (
+                                    // console.log("in2 =", message),
+                                    <ReceivedMessageContent message={conversation}/>
+                                )
+                            }
+                        </React.Fragment>
+                   
+            }
+
+            {/* {
+                    conversation?.messages?.map((message, index) => {
                     return (
                         <React.Fragment key={index}>
                             {
-                                message?.sent_by === 1 ? (
+                                    message?.sent_by === 1 ? (
                                     <SentMessageContent message={message}/>
 
                                 ) : (
@@ -51,7 +79,7 @@ const ActiveConversationChat = ({conversation}) => {
                         </React.Fragment>
                     )
                 })
-            }
+            } */}
         </React.Fragment>
     );
 };

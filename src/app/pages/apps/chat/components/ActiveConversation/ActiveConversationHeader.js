@@ -11,7 +11,7 @@ import useChatApp from "../../hooks/useChatApp";
 import {useNavigate} from "react-router-dom";
 
 const ActiveConversationHeader = () => {
-    const {activeConversation} = useChatApp();
+    const {activeConversation, userActiveConversationData} = useChatApp();
     const navigate = useNavigate();
     const {theme} = useJumboTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
@@ -20,6 +20,10 @@ const ActiveConversationHeader = () => {
     }
     if (!activeConversation)
         return null;
+
+
+
+        // console.log("activeConversation222 =", activeConversation)
     return (
         <Div
             sx={{
@@ -52,7 +56,8 @@ const ActiveConversationHeader = () => {
                 />
                 <Div>
                     <Typography variant={'h5'} mb={.5}>
-                        {activeConversation?.contact?.name}
+                        {userActiveConversationData?.name}
+                        {/* {activeConversation?.contact?.name} */}
                         <StarOutlinedIcon
                             sx={{
                                 color: theme => theme.palette.primary.main,

@@ -126,7 +126,7 @@ const ListAccountType = () => {
             filteredResult === null ? (
                 (accountTypeData && accountTypeData !== null) ?
                 accountTypeData.map((types, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Channel/edit/${types.id}`}>
                         <ListData 
                          Data={types} 
                          DeleteFun={DeleteFun}
@@ -141,7 +141,7 @@ const ListAccountType = () => {
             //   data with filtering 
               filteredResult !== null ?
                 filteredResult.map((types, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/accountType/edit/${types.id}`}>
+                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Channel/edit/${types.id}`}>
                         <ListData 
                          Data={types} 
                          DeleteFun={DeleteFun}

@@ -5,7 +5,55 @@ import {TextField} from "@mui/material";
 import useChatApp from "../../hooks/useChatApp";
 import {chatService} from "../../../../../services/chat-services";
 
+import AxiosApisChat from "../../../../../services/AxiosApisChat";
+import { useSelector, useDispatch } from 'react-redux';
+import {useParams} from "react-router-dom";
+import { toast } from 'react-toastify';
+
 const ActiveConversationFooter = () => {
+
+    const authData = useSelector(state => state.auth.AuthData)
+    const {id} = useParams();
+    const localStorageToken = localStorage.getItem('token')
+    const localStorageRefresh = localStorage.getItem('refresh')
+
+    
+
+    const sendChatMessageFun = async (messageData ,Token, refreshVal) => {
+
+        try{
+            await AxiosApisChat().sendChatMess(messageData,Token, refreshVal)
+
+            .then((data) => {
+
+                if(data === false)
+                {
+                    // navigate("/user/login");
+                    return false
+                }
+
+                
+                // dispatch(addAccount(data.results))
+            })
+           
+        }
+        catch(error){
+            // console.log("list error =" ,error);
+            toast.error("Network Error",{
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+    }
+
+
+
     const {
         activeConversation,
         activeConversationRef,
@@ -24,11 +72,29 @@ const ActiveConversationFooter = () => {
     });
     const onSendMessage = (event) => {
         const message = event.target.value.trim();
+        let messageVal = {}
+       
+
+        messageVal["message"] = message
+        messageVal["company"] = 1
+        // messageVal["company"] = authData.company
+        messageVal["account"] = 1
+        messageVal["chat"] = +id
+        messageVal["user"] = authData.id
+
+        // console.log("message 2 =", messageVal);
+
+
         if (event.key === 'Enter' && message) {
-            addMessageMutation.mutate({conversationID: activeConversation.id, message: message})
+            sendChatMessageFun(messageVal, localStorageToken, localStorageRefresh)
+            // addMessageMutation.mutate({conversationID: activeConversation.id, message: message})
             setMessage('');
         }
     };
+
+
+    
+
     return (
         <Div
             sx={{

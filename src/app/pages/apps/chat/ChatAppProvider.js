@@ -3,6 +3,7 @@ import ChatAppContext from "./ChatAppContext";
 
 const ChatAppProvider = ({children}) => {
     const [activeConversation, setActiveConversation] = React.useState(null);
+    const [userActiveConversationData, setUserActiveConversationData] = React.useState(null);
     const favoriteConversationsListRef = React.useRef();
     const recentConversationsListRef = React.useRef();
     const activeConversationRef = React.useRef();
@@ -15,12 +16,15 @@ const ChatAppProvider = ({children}) => {
         recentConversationsListRef,
         contactConversationsListRef,
         activeConversationRef,
+        userActiveConversationData,
+        setUserActiveConversationData
     }), [
         activeConversation,
         activeConversationRef,
         favoriteConversationsListRef,
         recentConversationsListRef,
-        contactConversationsListRef
+        contactConversationsListRef,
+        userActiveConversationData
     ]);
 
     return (

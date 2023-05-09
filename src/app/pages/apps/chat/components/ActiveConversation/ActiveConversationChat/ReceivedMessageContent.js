@@ -1,12 +1,24 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import Div from "@jumbo/shared/Div";
 import Paper from "@mui/material/Paper";
 import {Typography} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import useChatApp from "../../../hooks/useChatApp";
 
+import moment from 'moment';
+
 const ReceivedMessageContent = ({message}) => {
-    const {activeConversation} = useChatApp();
+    const {activeConversation, userActiveConversationData} = useChatApp();
+
+
+    // used to scroll down onload
+    const bottomRef = useRef(null);
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+      }, []);
+      
+
+    //   console.log("userActiveConversationData2 =", userActiveConversationData);
     return (
         <Div
             sx={{
@@ -37,7 +49,8 @@ const ReceivedMessageContent = ({message}) => {
                                 fontSize={"smaller"}
                                 mb={.5}
                             >
-                                {activeConversation?.contact?.name} - {message?.sent_at}
+                                {userActiveConversationData?.name} - {moment(message?.timestamp).format('LT')}
+                                {/* {activeConversation?.contact?.name} - {message?.sent_at} */}
                             </Typography>
                             <div className="Message-item">
                                 <Paper
@@ -51,6 +64,9 @@ const ReceivedMessageContent = ({message}) => {
                     </React.Fragment>
                 )
             }
+            {/* // used to scroll down onload */}
+                    <div ref={bottomRef} />
+
         </Div>
     );
 };
