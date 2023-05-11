@@ -5,23 +5,26 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 import useChatApp from "../../hooks/useChatApp";
 
 const ConversationItem = ({conversationItem}) => {
 
+    const {channelId} = useParams();
+
     const {setUserActiveConversationData} = useChatApp();
 
     const navigate = useNavigate();
     const handleConversationClick = () => {
-        navigate(`/app/chats/conversation/${conversationItem?.id}`);
+        navigate(`/app/chats/${channelId}/conversation/${conversationItem?.id}`);
+        // navigate(`/app/chats/conversation/${conversationItem?.id}`);
 
 
         setUserActiveConversationData(conversationItem);
+        // console.log("conversationItem2 =", conversationItem);
     };
 
-    // console.log("conversationItem =", conversationItem);
     return (
         <List disablePadding>
             <ListItemButton component="li">

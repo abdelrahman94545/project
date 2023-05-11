@@ -11,7 +11,14 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get('/account/account-type/')
+            const {data} = await Instance.get('/account/account-type/',
+            { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -24,7 +31,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.post('/account/account-type/', accountTypeData)
+            const {data} = await Instance.post('/account/account-type/',{ 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            }, accountTypeData)
             return data;
         }
         else
@@ -37,7 +50,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get(`/account/account-type/${Id}/`)
+            const {data} = await Instance.get(`/account/account-type/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -50,7 +69,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.put(`/account/account-type/${Id}/`, accountTypeData)
+            const {data} = await Instance.put(`/account/account-type/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            }, accountTypeData)
             return data;
         }
         else
@@ -63,7 +88,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.delete(`/account/account-type/${Id}/`)
+            const {data} = await Instance.delete(`/account/account-type/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -78,7 +109,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get('/account/account/')
+            const {data} = await Instance.get('/account/account/',{ 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -91,7 +128,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.post('/account/account/', accountData)
+            const {data} = await Instance.post('/account/account/', { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            }, accountData)
             return data;
         }
         else
@@ -104,7 +147,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get(`/account/account/${Id}/`)
+            const {data} = await Instance.get(`/account/account/${Id}/`,{ 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -117,7 +166,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.put(`/account/account/${Id}/`, accountData)
+            const {data} = await Instance.put(`/account/account/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            }, accountData)
             return data;
         }
         else
@@ -130,7 +185,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.delete(`/account/account/${Id}/`)
+            const {data} = await Instance.delete(`/account/account/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -147,7 +208,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get('/account/company/company/')
+            const {data} = await Instance.get('/account/company/company/', { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -160,7 +227,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.post('/account/company/company/', companyData)
+            const {data} = await Instance.post('/account/company/company/', { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            }, companyData)
             return data;
         }
         else
@@ -173,7 +246,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get(`/account/company/company/${Id}/`)
+            const {data} = await Instance.get(`/account/company/company/${Id}/`,{ 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else
@@ -186,7 +265,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.put(`/account/company/company/${Id}/`, companyData)
+            const {data} = await Instance.put(`/account/company/company/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            },companyData)
             return data;
         }
         else
@@ -200,7 +285,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.delete(`/account/company/company/${Id}/`)
+            const {data} = await Instance.delete(`/account/company/company/${Id}/`, { 
+                headers: {
+                    "Authorization" : `Bearer ${Token}`,
+                    "Connection":"keep-alive",
+                    "Content-Type":"application/json"
+                }
+            })
             return data;
         }
         else

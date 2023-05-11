@@ -6,7 +6,8 @@ import {chatService} from "../../../../../services/chat-services";
 import AxiosApisChat from "../../../../../services/AxiosApisChat";
 
 import { useSelector, useDispatch } from 'react-redux';
-import { addContacts } from "../../../../../redux2/reducers/chatSlice";
+// import { addContacts } from "../../../../../redux2/reducers/chatSlice";
+import {useParams} from "react-router-dom";
 
 const ContactsList = ({setTapName, callInfiniteScrollContactsFun}) => {
     const {contactConversationsListRef} = useChatApp();
@@ -24,6 +25,7 @@ const ContactsList = ({setTapName, callInfiniteScrollContactsFun}) => {
     const [contactsCount, setContactsCount] = useState();
     const contactesData = useSelector(state => state.Chat.contacts)
     const dispatch = useDispatch();
+    const {channelId} = useParams();
 
     // const getContactDataFun = async (page, pageSize,Token, refreshVal) => {
 
@@ -62,12 +64,12 @@ const ContactsList = ({setTapName, callInfiniteScrollContactsFun}) => {
 
     useEffect( async ()=>{
         setTapName("contact")
-        if(contactesData.length === 0)
-        {
-            callInfiniteScrollContactsFun()
+        // if(contactesData.length === 0)
+        // {
+            callInfiniteScrollContactsFun("tabes")
             // getContactDataFun(page, pageSize, localStorageToken, localStorageRefresh)
-        }
-    },[])
+        // }
+    },[channelId])
 
 
     // const results = [

@@ -11,11 +11,13 @@ import RecentConversationsList from "../RecentConversationsList";
 import ContactsList from "../ContactsList";
 
 import AxiosApisChat from "../../../../../services/AxiosApisChat";
-import { addRooms } from "../../../../../redux2/reducers/chatSlice";
+import { updateRooms, addRooms, updateContacts,addContacts } from "../../../../../redux2/reducers/chatSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import classes from "../../../../../Style/Style.module.scss";
 import { toast } from 'react-toastify';
-import { addContacts } from "../../../../../redux2/reducers/chatSlice";
+// import { updateContacts,addContacts } from "../../../../../redux2/reducers/chatSlice";
+import {useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
 const ChatAppSidebar = () => {
@@ -26,9 +28,9 @@ const ChatAppSidebar = () => {
     const localStorageRefresh = localStorage.getItem('refresh')
     // const [chatDataApi, setChatDataApi] = useState();
     const [chatPage, setChatPage] = useState(1);
-    const [chatPageSize, setChatPageSize] = useState(10);
+    const [chatPageSize, setChatPageSize] = useState(5);
     const [contactPage, setContactPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [contactPageSize, setContactPageSize] = useState(10);
     const [rommsCount, setRommsCount] = useState();
     const [showAndHideChatLoader, setShowAndHideChatLoader] = useState(false);
     const [showAndHideContactLoader, setShowAndHideContactLoader] = useState(false);
@@ -36,15 +38,31 @@ const ChatAppSidebar = () => {
     const [infinityScrollContactLock, setInfinityScrollContactLock] = useState(true);
     const [tapName, setTapName] = useState("");
     const [contactsCount, setContactsCount] = useState();
-    const dispatch = useDispatch();
-    
+    const {channelId, id} = useParams();
+    const [currentChannelId, setCurrentChannelId] = useState();
+    const dispatch = useDispatch(); 
+    const chateNextRoomsLink = useSelector(state => state.Chat.nextRooms)
+    const chatPreviousRoomsLink = useSelector(state => state.Chat.previousRooms)
+    const chatReduxData = useSelector(state => state.Chat)
+    const chateRooms = useSelector(state => state.Chat.rooms)
+    const navigate = useNavigate();
 
-    const getContactDataFun = async (contactPage, pageSize,Token, refreshVal) => {
+
+
+
+    useEffect(()=>{
+        console.log("change");
+        // setChatPage(1)
+        // navigate(`/app/chats/${channelId}`);
+    },[channelId])
+    console.log("test =", chatPage);
+
+    const getContactDataFun = async (contactPage, contactPageSize,Token, refreshVal) => {
 
         setShowAndHideContactLoader(true)
 
         try{
-            await AxiosApisChat().getContacts(contactPage, pageSize, Token, refreshVal)
+            await AxiosApisChat().getContacts(contactPage, contactPageSize, Token, refreshVal)
 
             .then((data) => {
 
@@ -54,13 +72,32 @@ const ChatAppSidebar = () => {
                     return false
                 }
 
+                console.log("currentChannelId6666 =",currentChannelId);
+                console.log("channelId3333 =",channelId);
+
+                if(currentChannelId !== channelId)
+                {
+                    console.log("reset state22");
+                    setContactPage(1)
+                    dispatch(addContacts(data))
+                }
+                
+                if(currentChannelId === channelId)
+                {
+                    console.log("current state2222");
+                    setContactPage(prevPage => prevPage + 1)
+                     dispatch(updateContacts(data))
+
+                }
+
+
                 // setDataApi(data.results)
-                setContactPage(prevPage => prevPage + 1)
+                // setContactPage(prevPage => prevPage + 1)
                 setContactsCount(data.count)
-                dispatch(addContacts(data.results))
+                // dispatch(updateContacts(data.results))
             }).then(()=>{
 
-              
+                setCurrentChannelId(channelId)
                 setShowAndHideContactLoader(false)
             })
            
@@ -88,12 +125,24 @@ const ChatAppSidebar = () => {
 
 
 
-    const getChatDataFun = async (chatPage, chatPageSize, Token, refreshVal) => {
-
+    const getChatDataFun = async (channelIdVal,chatPage, chatPageSize, Token, refreshVal) => {
+        
+        let newRoomsLink = null
+        if(currentChannelId !== channelId)
+        {
+             newRoomsLink = null
+        }
+        else
+        {
+             newRoomsLink = chateNextRoomsLink?.replace('http://62.171.166.157:9497','')
+        }
+        // const newRoomsLink = chateNextRoomsLink?.replace('http://62.171.166.157:9497','')
+        console.log("new =", newRoomsLink);
+        
         setShowAndHideChatLoader(true)
 
         try{
-            await AxiosApisChat().getChatList(chatPage, chatPageSize, Token, refreshVal)
+            await AxiosApisChat().getChatList(channelIdVal,chatPage, chatPageSize, Token, refreshVal, newRoomsLink)
 
             .then((data) => {
 
@@ -103,15 +152,33 @@ const ChatAppSidebar = () => {
                     return false
                 }
 
-                // setChatDataApi(data.results)
                 
-                setChatPage(prevPage => prevPage + 1)
+
+                // setChatDataApi(data.results)
+
+                if(currentChannelId !== channelId)
+                {
+                    console.log("reset state");
+                    setChatPage(1)
+                    dispatch(addRooms(data))
+                }
+                
+                if(currentChannelId === channelId)
+                {
+                    console.log("current state");
+                    setChatPage(prevPage => prevPage + 1)
+                     dispatch(updateRooms(data))
+
+                }
+                
+                
+                // setChatPage(prevPage => prevPage + 1)
                 setRommsCount(data.count)
                 // setPageSize(prevPageSize => prevPageSize + 10)
-                dispatch(addRooms(data.results))
+                // dispatch(updateRooms(data.results))
             }).then(()=>{
 
-                
+                setCurrentChannelId(channelId)
                 setShowAndHideChatLoader(false)
             })
            
@@ -136,26 +203,64 @@ const ChatAppSidebar = () => {
         }
     }
 
-    const callInfiniteScrollChatFun = () => {
+    const callInfiniteScrollChatFun = (callApiWith) => {
         
-        if(infinityScrollChatLock && !showAndHideChatLoader)
+         if(infinityScrollChatLock && !showAndHideChatLoader)
         {
-            setShowAndHideChatLoader(true)
-            getChatDataFun(chatPage, chatPageSize, localStorageToken, localStorageRefresh)
+            // setShowAndHideChatLoader(true)
+            // check if the channel change or i use the Infinitescroll to call api
+            if(callApiWith === "tabes")
+            {
+                console.log("tabes111 =");
+                getChatDataFun(channelId, 1 , chatPageSize, localStorageToken, localStorageRefresh)
+                setShowAndHideChatLoader(true)
+            }
+            else 
+            if(callApiWith === "Infinitescroll" 
+            && ((chatPreviousRoomsLink === null && chateNextRoomsLink !== null) || (chatPreviousRoomsLink !== null && chateNextRoomsLink !== null)))
+            {
+                console.log("Infinitescroll1111 =");
+                getChatDataFun(channelId,chatPage + 1, chatPageSize, localStorageToken, localStorageRefresh)
+                setShowAndHideChatLoader(true)
+            }
+            
         }
     }
 
 
-    const callInfiniteScrollContactsFun = () => {
+    const callInfiniteScrollContactsFun = (callApiWith) => {
 
         if(infinityScrollContactLock && !showAndHideContactLoader)
         {
-            setShowAndHideContactLoader(true)
-            getContactDataFun(contactPage, pageSize, localStorageToken, localStorageRefresh)
+            // setShowAndHideContactLoader(true)
+
+            // check if the channel change or i use the Infinitescroll to call api
+            if(callApiWith === "tabes")
+            { console.log("in tabes");
+                getContactDataFun(1, contactPageSize, localStorageToken, localStorageRefresh)
+                // getContactDataFun(contactPage, 1, localStorageToken, localStorageRefresh)
+                setShowAndHideContactLoader(true)
+            }
+            else if(callApiWith === "Infinitescroll" 
+            && ((chatReduxData.previousContacts === null && chatReduxData.nextContacts !== null) 
+                || (chatReduxData.previousContacts !== null && chatReduxData.nextContacts !== null)))
+            {
+                console.log("in Infinitescroll =", contactPage);
+                getContactDataFun( contactPage +1 , contactPageSize , localStorageToken, localStorageRefresh)
+                setShowAndHideContactLoader(true)
+            }
+
+            // getContactDataFun(contactPage, contactPageSize, localStorageToken, localStorageRefresh)
         }
     }
 
+     
+    // console.log("currentChannelId =",currentChannelId);
+    // console.log("channelId =", channelId);
+    
 
+   console.log("rommsCount7777 =",rommsCount);
+   console.log("chateRooms.length7777 =",chateRooms.length);
 
     return (
         <React.Fragment>
@@ -182,13 +287,13 @@ const ChatAppSidebar = () => {
                     callinfinitescrollchatfun={callInfiniteScrollChatFun}
                     callinfinitescrollcontactsfun={callInfiniteScrollContactsFun}
                     rommscount={rommsCount}
-                    showAndHideChatLoader={showAndHideChatLoader}
-                    showAndHideContactLoader={showAndHideContactLoader}
+                    showandhidechatloader={showAndHideChatLoader.toString()}
+                    showandhidecontactloader={showAndHideContactLoader.toString()}
                     tapName={tapName}
                 >
                     <TabPanel value={"chat"} sx={{p: 0}}  >
                         {/* <FavoriteConversationsList/> */}
-                        <RecentConversationsList callInfiniteScrollFun={callInfiniteScrollChatFun} setTapName={setTapName}/>
+                        <RecentConversationsList callInfiniteScrollFun={callInfiniteScrollChatFun} setTapName={setTapName} setChatPage={setChatPage}/>
                     </TabPanel>
                     <TabPanel value={"contact"} sx={{p: 0}}>
                         <ContactsList setTapName={setTapName} callInfiniteScrollContactsFun={callInfiniteScrollContactsFun}/>

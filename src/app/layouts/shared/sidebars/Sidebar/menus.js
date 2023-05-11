@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
@@ -46,10 +46,31 @@ import { useSelector } from 'react-redux';
 
 export const Menus = () => {
     const authData = useSelector(state => state.auth.AuthData);
-    // const authData = useSelector(state => state.auth);
-    // console.log("authdata=", authData?  authData.is_superuser : null);
-    // console.log("authdata=", authData.AuthData?  authData.AuthData.is_superuser : null);
-     
+    const whatsAppChanelsDataLocal = localStorage.getItem('whatsAccount');
+    const [whatsChannel, setWhatsChannel] = useState([])
+    const [test, setTest] = useState([
+        {id: 1, country: 'Austria'},
+        {id: 2, country: 'Belgium'},
+        {id: 3, country: 'Canada'},
+      ]);
+
+    useEffect(()=>{
+      return  whatsAppChanelsDataLocal !== undefined && whatsAppChanelsDataLocal !== null ?
+        JSON.parse(whatsAppChanelsDataLocal).map((channel)=>{           
+                setWhatsChannel(prevState => 
+                    [...prevState, 
+                    {
+                        uri: `/app/chats/${channel.id}`,
+                        label: `${channel.name}`,
+                        // label: 'sidebar.menuItem.createUser',
+                        type: "nav-item",
+                        icon: `<CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>`
+                    }
+                    ]);
+                }) : null
+    },[])
+    
+    
    const menus = [
     (authData && authData.is_staff && authData.is_superuser)? 
     {
@@ -201,17 +222,25 @@ export const Menus = () => {
     //         }
     //     ]
     // },
+   
 
     {
         label: 'sidebar.menu.apps',
         type: "section",
         children: [
+            // {
+            //     uri: "/app/chats",
+            //     label: 'Whatsapp',
+            //     // label: 'sidebar.menuItem.chat',
+            //     type: "nav-item",
+            //     icon: <ChatOutlinedIcon sx={{fontSize: 20}}/>
+            // },
             {
-                uri: "/app/chats",
-                label: 'Whatsapp',
-                // label: 'sidebar.menuItem.chat',
-                type: "nav-item",
-                icon: <ChatOutlinedIcon sx={{fontSize: 20}}/>
+                label: 'WhatsApp',
+                type: "collapsible",
+                icon: <SourceOutlinedIcon sx={{fontSize: 20}}/>,
+                children:  whatsChannel 
+                // children: [ whatsChannel ]
             },
             {
                 uri: "/app/contacts/all",
@@ -227,24 +256,24 @@ export const Menus = () => {
             }
         ]
     },
-    // {
-    //     label: 'sidebar.menu.cards',
-    //     type: "section",
-    //     children: [
-    //         {
-    //             uri: "/widgets",
-    //             label: 'sidebar.menuItem.widgets',
-    //             type: "nav-item",
-    //             icon: <WidgetsOutlinedIcon sx={{fontSize: 20}}/>
-    //         },
-    //         {
-    //             uri: "/metrics",
-    //             label: 'sidebar.menuItem.metrics',
-    //             type: "nav-item",
-    //             icon: <LeaderboardOutlinedIcon sx={{fontSize: 20}}/>
-    //         }
-    //     ]
-    // },
+    {
+        label: 'sidebar.menu.cards',
+        type: "section",
+        children: [
+            {
+                uri: "/widgets",
+                label: 'sidebar.menuItem.widgets',
+                type: "nav-item",
+                icon: <WidgetsOutlinedIcon sx={{fontSize: 20}}/>
+            },
+            {
+                uri: "/metrics",
+                label: 'sidebar.menuItem.metrics',
+                type: "nav-item",
+                icon: <LeaderboardOutlinedIcon sx={{fontSize: 20}}/>
+            }
+        ]
+    },
     // {
     //     label: 'sidebar.menu.components',
     //     type: "section",

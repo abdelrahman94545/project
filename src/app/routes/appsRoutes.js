@@ -5,10 +5,17 @@ import ChatApp from "../pages/apps/chat";
 import Page from "@jumbo/shared/Page";
 
 const appsRoutes = [
+    // {
+    //     path: [
+    //         "/app/chats",
+    //         "/app/chats/:chatBy/:id",
+    //     ],
+    //     element: <Page component={ChatApp}/>,
+    // },
     {
         path: [
-            "/app/chats",
-            "/app/chats/:chatBy/:id",
+            "/app/chats/:channelId",
+            "/app/chats/:channelId/:chatBy/:id",
         ],
         element: <Page component={ChatApp}/>,
     },

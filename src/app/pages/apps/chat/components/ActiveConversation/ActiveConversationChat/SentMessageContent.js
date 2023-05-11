@@ -8,7 +8,7 @@ import moment from 'moment';
 const SentMessageContent = ({message}) => {
 
 
-    // used to scroll down onload
+    // used to scroll down onload 
     const bottomRef = useRef(null);
     useEffect(() => {
         bottomRef.current?.scrollIntoView({behavior: 'smooth'});

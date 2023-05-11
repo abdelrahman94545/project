@@ -28,20 +28,52 @@ const AxiosApisChat = () => {
     }
 
 
-    // chat list Data
-    axiosApisChat.getChatList = async (page, pageSize, Token, refreshVal) => {
+    // chat list rooms Data
+    axiosApisChat.getChatList = async (Id ,page, pageSize, Token, refreshVal, newRoomsLink) => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get(`/rooms/rooms/?page=${page}&page_size=${pageSize}`,
-             { 
-                headers: {
-                    "Authorization" : `Bearer ${Token}`,
-                    "Connection":"keep-alive",
-                    "Content-Type":"application/json"
-                }
-            })
-            return data;
+            if((newRoomsLink === undefined || newRoomsLink === null))
+            {  console.log("first =");
+                const {data} = await Instance.get(`/account/accountrooms/${Id}?page=1&page_size=5`,
+                // const {data} = await Instance.get(`/account/accountrooms/${Id}?page=${page}&page_size=${pageSize}`,
+                // const {data} = await Instance.get(`/rooms/rooms/?page=${page}&page_size=${pageSize}`,
+                { 
+                    headers: {
+                        "Authorization" : `Bearer ${Token}`,
+                        "Connection":"keep-alive",
+                        "Content-Type":"application/json"
+                    }
+                })
+                return data;
+            }
+            
+            if(newRoomsLink !== undefined || newRoomsLink !== null)
+            {  console.log("seconde =");
+                const {data} = await Instance.get(newRoomsLink,
+                // const {data} = await Instance.get(`/rooms/rooms/?page=${page}&page_size=${pageSize}`,
+                { 
+                    headers: {
+                        "Authorization" : `Bearer ${Token}`,
+                        "Connection":"keep-alive",
+                        "Content-Type":"application/json"
+                    }
+                })
+                return data;
+            }
+
+                // const {data} = await Instance.get(`/account/accountrooms/${Id}?page=${page}&page_size=${pageSize}`,
+                // // const {data} = await Instance.get(`/rooms/rooms/?page=${page}&page_size=${pageSize}`,
+                // { 
+                //     headers: {
+                //         "Authorization" : `Bearer ${Token}`,
+                //         "Connection":"keep-alive",
+                //         "Content-Type":"application/json"
+                //     }
+                // })
+                // return data;
+            
+            
         }
         else
         {
@@ -97,7 +129,7 @@ const AxiosApisChat = () => {
 
 
     // all contacts list Data
-    axiosApisChat.getAllContacts = async (page, pageSize, Token, refreshVal) => {
+    axiosApisChat.getAllContacts = async (page, pageSize, Token, refreshVal) => {  
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {

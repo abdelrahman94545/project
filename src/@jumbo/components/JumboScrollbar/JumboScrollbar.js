@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useRef} from 'react';
 import Scrollbars from "react-custom-scrollbars-2";
 import useJumboTheme from "@jumbo/hooks/useJumboTheme";
 import PropTypes from "prop-types";
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const JumboScrollbar = React.forwardRef((props, ref) => {
 
     const chateRooms = useSelector(state => state.Chat.rooms)
+    const topRef = useRef(null);
 
     const {theme} = useJumboTheme();
     const {direction, renderTrackVertical, renderTrackHorizontal, disable, ...restProps} = props;
@@ -46,17 +47,18 @@ const JumboScrollbar = React.forwardRef((props, ref) => {
 
         const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight
         
-        if(bottom && (props.rommsCount !== chateRooms.length) && (props.showAndHideChatLoader === false || props.showAndHideContactLoader === false))
+        if(bottom && (props.rommsCount !== chateRooms.length) && (props.showandhidechatloader === "false" || props.showandhidecontactloader == "false"))
         {
+            console.log("bottom");
             if(props.tapName === "chat")
             {
-                props.callinfinitescrollchatfun()
+                props.callinfinitescrollchatfun("Infinitescroll")
                 // console.log("bottom =", bottom);
             }
 
             if(props.tapName === "contact")
             {
-                props.callinfinitescrollcontactsfun()
+                props.callinfinitescrollcontactsfun("Infinitescroll")
                 // console.log("bottom =", bottom);
             }
             
@@ -65,8 +67,10 @@ const JumboScrollbar = React.forwardRef((props, ref) => {
         
     }
 
-    const handleScrollStop = () => {
-        
+    const handleUpdate = () => {
+        console.log("update2222");
+        // scroll to top onload
+        topRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
 
     console.log("props =", props);
@@ -74,7 +78,7 @@ const JumboScrollbar = React.forwardRef((props, ref) => {
     return (
         <Scrollbars
         onScroll={handleScroll}
-        onScrollStop={handleScrollStop}
+        onUpdate={handleUpdate}
             renderView={
                 props => (<div {...props} style={
                     (theme.direction === "rtl" ? {

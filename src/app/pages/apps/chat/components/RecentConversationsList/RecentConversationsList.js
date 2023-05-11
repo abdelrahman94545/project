@@ -8,9 +8,10 @@ import {chatService} from "../../../../../services/chat-services";
 
 import AxiosApisChat from "../../../../../services/AxiosApisChat";
 import { useSelector, useDispatch } from 'react-redux';
-import { addRooms } from "../../../../../redux2/reducers/chatSlice";
+// import { addRooms } from "../../../../../redux2/reducers/chatSlice";
+import {useParams} from "react-router-dom";
 
-const RecentConversationsList = ({callInfiniteScrollFun, setTapName}) => {
+const RecentConversationsList = ({callInfiniteScrollFun, setTapName, setChatPage}) => {
     const {recentConversationsListRef} = useChatApp();
     const renderContact = React.useCallback((contact) => {
         return (
@@ -26,6 +27,7 @@ const RecentConversationsList = ({callInfiniteScrollFun, setTapName}) => {
     // const [pageSize, setPageSize] = useState(10);
     // const dispatch = useDispatch();
     const chateRooms = useSelector(state => state.Chat.rooms)
+    const {channelId} = useParams();
   
 
     // const getChatDataFun = async (page, pageSize, Token, refreshVal) => {
@@ -67,14 +69,16 @@ const RecentConversationsList = ({callInfiniteScrollFun, setTapName}) => {
     //     getChatDataFun(page, pageSize, localStorageToken, localStorageRefresh)
     // }
 
-    useEffect( async ()=>{
+    useEffect(  ()=>{
+        console.log("innnnn");
         setTapName("chat")
-        if(chateRooms.length === 0)
-        {
+        setChatPage(1)
+        // if(chateRooms.length === 0)
+        // {
             // getChatDataFun(page, pageSize, localStorageToken, localStorageRefresh)
-            callInfiniteScrollFun()
-        }
-    },[])
+            callInfiniteScrollFun("tabes")
+        // }
+    },[channelId])
 
 console.log("rooms =", chateRooms);
 

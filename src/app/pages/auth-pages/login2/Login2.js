@@ -70,6 +70,7 @@ const Login2 = ({disableSmLogin}) => {
                 // setAuthToken(data?.access);
                 localStorage.setItem('token', data?.access);
                 localStorage.setItem('refresh', data?.refresh);
+                localStorage.setItem('whatsAccount', JSON.stringify(data?.whatsAccount));
                 
 
                 // setAuthToken(data?.token);
