@@ -72,6 +72,7 @@ const Form = ({
                         && feildName !== "is_active" 
                         && feildName !== "is_staff" 
                         && feildName !== "is_admin" 
+                        && feildName !== "active" 
                         && feildName !== "password" ?
                                 <FormControl key={index}>
                                 <TextField
@@ -112,7 +113,7 @@ const Form = ({
                                     name={feildName}
                                     onChange={(event) => setCompanyVal(event.target.value)}
                                 >
-                                    {Companies !== null ? Companies.map((company,index)=>(
+                                    {Companies && Companies !== null ? Companies.map((company,index)=>(
                                         <MenuItem key={index} value={company.id}>{company.name}</MenuItem>
                                     )): null}
                                 </Select>
@@ -153,6 +154,21 @@ const Form = ({
                                 />
     
                                 </FormControl>
+                            : (feildName === "active" ) ?
+                                <FormGroup aria-label="position" row key={feildName}>
+                                    <FormControlLabel  
+                                    control={<Checkbox/>} 
+                                    label={feildName.charAt(0).toUpperCase() + feildName.slice(1)}
+                                    value={feildName.charAt(0).toUpperCase() + feildName.slice(1)}
+                                    name={feildName}
+                                    checked={  data  && (data[feildName])}
+                                    // checked={  data  ? data.is_staff : false}
+                                    onChange={location.pathname.includes("edit") ? checkboxChange : null}
+                                    />
+                                </FormGroup>
+                            
+
+
                         : (feildName === "is_active" || feildName === "is_staff" || feildName === "is_admin" )  && (
                             <FormGroup aria-label="position" row key={feildName}>
                                 <FormControlLabel  

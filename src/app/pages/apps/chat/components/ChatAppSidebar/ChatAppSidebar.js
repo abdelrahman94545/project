@@ -68,7 +68,7 @@ const ChatAppSidebar = () => {
 
                 if(data === false)
                 {
-                    // navigate("/user/login");
+                    navigate("/user/login");
                     return false
                 }
 
@@ -148,7 +148,7 @@ const ChatAppSidebar = () => {
 
                 if(data === false)
                 {
-                    // navigate("/user/login");
+                    navigate("/user/login");
                     return false
                 }
 

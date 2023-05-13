@@ -31,13 +31,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.post('/account/account-type/',{ 
+            const {data} = await Instance.post('/account/account-type/', accountTypeData,{ 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,
                     "Connection":"keep-alive",
                     "Content-Type":"application/json"
                 }
-            }, accountTypeData)
+            })
             return data;
         }
         else
@@ -69,13 +69,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.put(`/account/account-type/${Id}/`, { 
+            const {data} = await Instance.put(`/account/account-type/${Id}/`, accountTypeData, { 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,
                     "Connection":"keep-alive",
                     "Content-Type":"application/json"
                 }
-            }, accountTypeData)
+            })
             return data;
         }
         else
@@ -128,13 +128,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.post('/account/account/', { 
+            const {data} = await Instance.post('/account/account/', accountData, { 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,
                     "Connection":"keep-alive",
                     "Content-Type":"application/json"
                 }
-            }, accountData)
+            })
             return data;
         }
         else
@@ -166,13 +166,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.put(`/account/account/${Id}/`, { 
+            const {data} = await Instance.put(`/account/account/${Id}/`, accountData, { 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,
                     "Connection":"keep-alive",
                     "Content-Type":"application/json"
                 }
-            }, accountData)
+            })
             return data;
         }
         else
@@ -227,13 +227,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.post('/account/company/company/', { 
+            const {data} = await Instance.post('/account/company/company/', companyData , { 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,
                     "Connection":"keep-alive",
                     "Content-Type":"application/json"
                 }
-            }, companyData)
+            })
             return data;
         }
         else
@@ -265,13 +265,13 @@ const AxiosApis = () => {
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.put(`/account/company/company/${Id}/`, { 
+            const {data} = await Instance.put(`/account/company/company/${Id}/`, companyData, { 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,
                     "Connection":"keep-alive",
                     "Content-Type":"application/json"
                 }
-            },companyData)
+            })
             return data;
         }
         else

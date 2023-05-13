@@ -13,6 +13,7 @@ import {CircularProgress, Typography} from "@mui/material";
 
 import AxiosApisChat from "../../../../../services/AxiosApisChat";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
     const {setActiveConversation, activeConversation} = useChatApp();
@@ -32,6 +33,7 @@ const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
     const [chatRoomData ,setChatRoomData] = useState()
+    const navigate = useNavigate();
 
     const getChatRommDataFun = async (Id,Token, refreshVal) => {
 
@@ -42,7 +44,7 @@ const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
 
                 if(data === false)
                 {
-                    // navigate("/user/login");
+                    navigate("/user/login");
                     return false
                 }
 

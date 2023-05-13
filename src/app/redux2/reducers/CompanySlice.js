@@ -12,7 +12,7 @@ export const CompanySlice = createSlice({
         addCompany: (state, action) => {
             return {
                 ...state,
-                companiesData: action.payload
+                companiesData: action.payload.results
             }
         }
     }

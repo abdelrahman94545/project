@@ -27,7 +27,8 @@ const CreateAccount = () => {
     const dispatch = useDispatch();
 
     const [data , setData] = useState(null) 
-    const [formFeildsArr , setFormFeildsArr] = useState(["name","company","account_type"]) 
+    const [formFeildsArr , setFormFeildsArr] = useState(
+        ["name","company","account_type","access_token","app_version","phone_number_id","url","active"]) 
     const Token = localStorage.getItem('token')
     const Refresh = localStorage.getItem('refresh')
 
@@ -146,6 +147,11 @@ const CreateAccount = () => {
 
         Array.from(e.target).forEach(element => {
 
+            if(element.name === "active")
+            {
+                accountData[element.name] = element.checked
+            }
+            else
             if((element.name  && element.value) && (element.name === "company" || element.name === "account_type"))
             {
                 accountData[element.name] = Number(element.value)
@@ -157,7 +163,8 @@ const CreateAccount = () => {
             }
           });
 
-          accountData["active"] = true
+        //   accountData["active"] = true
+
 
             // Edit user data
             if(location.pathname.includes("edit"))
@@ -297,6 +304,14 @@ const CreateAccount = () => {
     }
 
 
+    const checkboxChange = (e) => {
+        setData((prevState) => ({
+            ...prevState,
+            [e.target.name]: e.target.checked
+        }))
+    }
+
+
     return(
 
         <div>
@@ -309,6 +324,7 @@ const CreateAccount = () => {
                 formName="Account"
                 Companies={CompaniesData}
                 accountType={accountTypeData}
+                checkboxChange={checkboxChange}
                 />
             )}
 

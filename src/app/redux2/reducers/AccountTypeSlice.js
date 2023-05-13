@@ -13,7 +13,7 @@ export const AccountTypeSlice = createSlice({
         addAccountType: (state, action) =>{
             return {
                 ...state,
-                accountTypeData: action.payload
+                accountTypeData: action.payload.results
             }
         }
     }

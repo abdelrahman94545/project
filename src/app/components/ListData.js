@@ -30,10 +30,10 @@ const ListData = ({Data, DeleteFun}) => {
                     }}
                 >
                     <Stack direction={'row'} alignItems={'center'}>
-                        <Item sx={{ml: -1}}>
+                        {/* <Item sx={{ml: -1}}>
                             <JumboBookmark  sx={{verticalAlign: 'middle'}}/>
-                            {/* <JumboBookmark value={user.isFavorite} sx={{verticalAlign: 'middle'}}/> */}
-                        </Item>
+                            <JumboBookmark value={user.isFavorite} sx={{verticalAlign: 'middle'}}/>
+                        </Item> */}
                         <Item>
                             <Badge overlap="circular" variant="dot"
                                    anchorOrigin={{
@@ -74,10 +74,23 @@ const ListData = ({Data, DeleteFun}) => {
                 {Object.keys(Data).map((itemData, index)=>(
                    
                     itemData !== "name" 
-                    && itemData !== "full_name" 
+                    && itemData !== "full_name"  
                     && itemData !== "id" 
                     && itemData !== "email" 
                     && itemData !== "user" 
+                    && itemData !== "access_token" 
+                    && itemData !== "app_version" 
+                    && itemData !== "company" 
+                    && itemData !== "phone_number_id" 
+                    && itemData !== "url" 
+                    && itemData !== "first_name" 
+                    && itemData !== "last_name" 
+                    && itemData !== "phone_number" 
+                    && itemData !== "password" 
+                    && itemData !== "is_active" 
+                    && itemData !== "is_staff" 
+                    && itemData !== "is_superuser" 
+                    && itemData !== "is_admin" 
                     && Data[itemData] !== null ? 
                         <Item
                         key={index}
@@ -131,11 +144,11 @@ const ListData = ({Data, DeleteFun}) => {
                             {"Delete"}
                         </Button>
                 </Item>
-                <Item sx={{ml: {xs: 'auto', sm: 0}}}>
+                {/* <Item sx={{ml: {xs: 'auto', sm: 0}}}>
                     <IconButton aria-label="settings">
                         <MoreHorizIcon/>
                     </IconButton>
-                </Item>
+                </Item> */}
             </Stack>
         )}
         </Card>

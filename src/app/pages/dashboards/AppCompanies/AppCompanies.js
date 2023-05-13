@@ -4,28 +4,32 @@ import {useNavigate} from "react-router-dom";
 import { toast } from 'react-toastify';
 import ListData from "../../../components/ListData";
 import {Typography, Card} from "@mui/material";
-import { addAccountType } from "../../../redux2/reducers/AccountTypeSlice";
+import { addCompany } from "../../../redux2/reducers/CompanySlice";
 import { useSelector, useDispatch } from 'react-redux';
 import {Link} from "react-router-dom";
 import Filter from '../../../components/Filter'
+import AuthAxios from "../../../services/AxiosApis";
+import { addUsers } from "../../../redux2/reducers/usersListSlice";
+import {useParams} from "react-router-dom";
 
 
 
-const ListAccountType = () => {
+const ListCompanies = () => {
 
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const accountTypeData = useSelector(state => state.accountType.accountTypeData)
-    const [filteredResult, setFilteredResult] = useState(null)
+    const CompaniesData = useSelector(state => state.Company.companiesData) 
+       const [filteredResult, setFilteredResult] = useState(null)
+       const [companyUserData, setCompanyUserData] = useState(null)
+       const {Id} = useParams();
 
 
-    const getAccountTypeDataFun = async (Token, refreshVal) => {
+    const getUsersDataFun = async (Token, refreshVal) => {
 
         try{
-            await AxiosApis().listAccountType(Token, refreshVal)
-
+            await AuthAxios().usersList(Token, refreshVal)
             .then((data) => {
 
                 if(data === false)
@@ -34,9 +38,9 @@ const ListAccountType = () => {
                     return false
                 }
 
-                dispatch(addAccountType(data))
-            })
-           
+                dispatch(addUsers(data.results))
+                // dispatch(addUsers(data))
+            }) 
         }
         catch(error){
             // console.log("list error =" ,error);
@@ -53,19 +57,12 @@ const ListAccountType = () => {
         }
     }
 
-    useEffect( async ()=>{
-        if(accountTypeData === null)
-        {
-            getAccountTypeDataFun(localStorageToken, localStorageRefresh)
-        }
-    },[])
-
 
     const DeleteFun = async (id) => {
         let newFilteredResult = filteredResult
         try
         {
-            await AxiosApis().DeleteAccountType(id, localStorageToken, localStorageRefresh)
+            await AuthAxios().deleteUser(id, localStorageToken, localStorageRefresh)
             .then((res) => {
 
                 if(res === false)
@@ -74,7 +71,7 @@ const ListAccountType = () => {
                     return false
                 }
 
-                getAccountTypeDataFun(localStorageToken, localStorageRefresh)
+                getUsersDataFun(localStorageToken, localStorageRefresh)
 
                 // used for delete data when filter is on
                 if(newFilteredResult !== null)
@@ -82,11 +79,12 @@ const ListAccountType = () => {
                     newFilteredResult = newFilteredResult.filter(( newData ) => {
                         return newData.id !== id;
                     });
-
+    
                     setFilteredResult(newFilteredResult)
                 }
+                
 
-                toast.success("The Account Type Has Been Deleted",{
+                toast.success("The user has been Deleted",{
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -100,6 +98,7 @@ const ListAccountType = () => {
         }
         catch(error)
         {
+            console.log("error =", error);
             toast.error("Network Error",{
                 position: "top-center",
                 autoClose: 3000,
@@ -113,41 +112,81 @@ const ListAccountType = () => {
         }
     }
 
+
+
+    useEffect(()=>{
+        if(CompaniesData && CompaniesData !== null)
+        {
+            CompaniesData.map((company, index) => {
+                if(Id == company.id)
+                {
+                    // console.log("data for filter =", company.user);
+                    setCompanyUserData(company.user)
+                }
+            })
+        }
+    })
+
+    console.log("filteredResult =", filteredResult);
+    console.log("companyUserData =", companyUserData);
+
     return (
         <React.Fragment>
             <Typography variant={'h2'} mb={3}>
-                {/* Users2 */}
+                App Companies
             </Typography>
 
-            <Filter setFilteredResult={setFilteredResult} reduxData={accountTypeData} />
+            {/* {(CompaniesData && CompaniesData !== null) ?
+                CompaniesData.map((company, index) => (
+                    console.log("with filter"),
+                    Id == company.id ? */}
+                    {companyUserData?
+                        <Filter  setFilteredResult={setFilteredResult} reduxData={companyUserData? [companyUserData] : null} />
+                    : null}
+                    
+                    {/* : null
+                )) : null} */}
      
             {/* data without filtering */}
             { 
             filteredResult === null ? (
-                (accountTypeData && accountTypeData !== null) ?
-                accountTypeData.map((types, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Channel/edit/${types.id}`}>
+                (CompaniesData && CompaniesData !== null) ?
+                CompaniesData.map((company, index) => (
+                    console.log("without filter"),
+                    Id == company.id ? 
+                    <Link key={index}  style={{color: "#fff"}} to={`${company.user? `/list-views/users/edit/${company.user.id}` : null} `}>
                         <ListData 
-                         Data={types} 
+                         Data={company.user} 
                          DeleteFun={DeleteFun}
                          key={index}
                         />
                     </Link>
-                    
+                    : null
                 ))
             :null
 
              ) : 
             //   data with filtering 
               filteredResult !== null ?
-                filteredResult.map((types, index) => (
-                    <Link key={index}  style={{color: "#fff"}} to={`/dashboards/Channel/edit/${types.id}`}>
+                filteredResult.map((user, index) => (
+                    
+                    // Id == company.id ? 
+                    // console.log("with filter =", company)
+                    <Link key={index}  style={{color: "#fff"}} to={`/list-views/users/edit/${user.id}`}>
                         <ListData 
-                         Data={types} 
+                         Data={user} 
                          DeleteFun={DeleteFun}
                          key={index}
                         />
                     </Link>
+                    // : null
+                    // <Link key={index}  style={{color: "#fff"}} to={`/list-views/users/edit/${users.id}`}>
+                    //     <ListData 
+                    //      Data={company} 
+                    //      DeleteFun={DeleteFun}
+                    //      key={index}
+                    //     />
+                    // </Link>
                 ))
                 
             :null
@@ -157,4 +196,4 @@ const ListAccountType = () => {
 }
 
 
-export default ListAccountType
+export default ListCompanies

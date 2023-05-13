@@ -9,6 +9,7 @@ import AxiosApisChat from "../../../../../services/AxiosApisChat";
 import { useSelector, useDispatch } from 'react-redux';
 import {useParams} from "react-router-dom";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const ActiveConversationFooter = () => {
 
@@ -16,6 +17,7 @@ const ActiveConversationFooter = () => {
     const {id} = useParams();
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
+    const navigate = useNavigate();
 
     
 
@@ -28,7 +30,7 @@ const ActiveConversationFooter = () => {
 
                 if(data === false)
                 {
-                    // navigate("/user/login");
+                    navigate("/user/login");
                     return false
                 }
 

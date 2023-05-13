@@ -4,6 +4,8 @@ import ContactsApp from "../pages/apps/contacts/ContactsApp";
 import ChatApp from "../pages/apps/chat";
 import Page from "@jumbo/shared/Page";
 
+import ListCompanies from "../pages/dashboards/AppCompanies/AppCompanies";
+
 const appsRoutes = [
     // {
     //     path: [
@@ -18,6 +20,12 @@ const appsRoutes = [
             "/app/chats/:channelId/:chatBy/:id",
         ],
         element: <Page component={ChatApp}/>,
+    },
+    {
+        path: [
+            "/app/company/:Id"
+        ],
+        element: <Page component={ListCompanies}/>,
     },
     {
         path: [

@@ -65,13 +65,13 @@ authAxios.createUser = async (userData,Token, refreshVal) => {
   const status = await authAxios.verifyAndRefreshToken(Token, refreshVal)
   if(status === 200)
   {
-    const {data} = await Instance.post('/api/user/', { 
+    const {data} = await Instance.post('/api/user/', userData , { 
       headers: {
           "Authorization" : `Bearer ${Token}`,
           "Connection":"keep-alive",
           "Content-Type":"application/json"
       }
-  } ,userData)
+  })
     return data;
   }
   else
@@ -103,13 +103,13 @@ authAxios.editUser = async (Id, userData, Token, refreshVal) => {
   const status = await authAxios.verifyAndRefreshToken(Token, refreshVal)
   if(status === 200)
   {
-  const {data} = await Instance.put(`/api/user/${Id}/`, { 
+  const {data} = await Instance.put(`/api/user/${Id}/`,userData , { 
     headers: {
         "Authorization" : `Bearer ${Token}`,
         "Connection":"keep-alive",
         "Content-Type":"application/json"
     }
-} ,userData)
+})
   return data;
   }
   else

@@ -66,7 +66,7 @@ const Filter = ({setFilteredResult, reduxData, filterKey}) => {
 // generate fiter feilds
     useEffect(()=>{
         if(reduxData !== null)
-        {
+        { console.log("filter = ", reduxData)
             reduxData.filter(element => {
                 setFilterFields(Object.keys(element))  
                 })
@@ -120,7 +120,23 @@ const Filter = ({setFilteredResult, reduxData, filterKey}) => {
             {filterFields && (
                 filterFields.map((filterField)=>(
                     
-                    filterField !== "id" && filterField !== "user" && filterField !== "active" ?(
+                    filterField !== "id" 
+                    && filterField !== "user" 
+                    && filterField !== "active" 
+                    && filterField !== "url" 
+                    && filterField !== "app_version" 
+                    && filterField !== "phone_number_id" 
+                    && filterField !== "access_token" 
+                    && filterField !== "company" 
+                    && filterField !== "first_name" 
+                    && filterField !== "is_active" 
+                    && filterField !== "is_admin" 
+                    && filterField !== "is_staff" 
+                    && filterField !== "is_superuser" 
+                    && filterField !== "last_name" 
+                    && filterField !== "password" 
+                    && filterField !== "phone_number" 
+                    ?(
                     <Box
                     sx={{
                         m: 1,

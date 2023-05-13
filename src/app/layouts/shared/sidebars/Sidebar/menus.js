@@ -37,7 +37,11 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import Grid3x3OutlinedIcon from '@mui/icons-material/Grid3x3Outlined';
 import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import AxiosApis from "../../../../services/AxiosApis";
+import { addCompany } from "../../../../redux2/reducers/CompanySlice";
+import {useNavigate} from "react-router-dom";
 
 // const authData = useSelector(state => state.auth);
 // console.log("authdata=", authData);
@@ -48,13 +52,73 @@ export const Menus = () => {
     const authData = useSelector(state => state.auth.AuthData);
     const whatsAppChanelsDataLocal = localStorage.getItem('whatsAccount');
     const [whatsChannel, setWhatsChannel] = useState([])
-    const [test, setTest] = useState([
-        {id: 1, country: 'Austria'},
-        {id: 2, country: 'Belgium'},
-        {id: 3, country: 'Canada'},
-      ]);
+    const [companies, setCompanies] = useState([])
+    const localStorageToken = localStorage.getItem('token')
+    const localStorageRefresh = localStorage.getItem('refresh')
+    const CompaniesData = useSelector(state => state.Company.companiesData) 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
+
+    const getCompaniesDataFun = async (Token, refreshVal) => {
+
+        try{
+            await AxiosApis().getCompanyData(Token, refreshVal)
+
+            .then((data) => {
+
+                if(data === false)
+                {
+                    navigate("/user/login");
+                    return false
+                }
+
+                dispatch(addCompany(data))
+            })
+        }
+        catch(error){
+            // console.log("list error =" ,error);
+            toast.error("Network Error",{
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
+    }
 
     useEffect(()=>{
+        if(CompaniesData !== null)
+        {
+            CompaniesData.map((company)=>{
+                setCompanies(prevState =>
+                    [...prevState, 
+                        {
+                            uri: `/app/company/${company.id}`,
+                            label: `${company.name}`,
+                            // label: 'sidebar.menuItem.createUser',
+                            type: "nav-item",
+                            icon: `<CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>`
+                        }
+                        ] )
+            })
+            
+        }
+    },[CompaniesData])
+
+    console.log("companies =", companies);
+ 
+    useEffect(()=>{
+        
+       if(CompaniesData === null && authData !== null)
+        { 
+            getCompaniesDataFun(localStorageToken, localStorageRefresh)
+        }
+
       return  whatsAppChanelsDataLocal !== undefined && whatsAppChanelsDataLocal !== null ?
         JSON.parse(whatsAppChanelsDataLocal).map((channel)=>{           
                 setWhatsChannel(prevState => 
@@ -70,7 +134,7 @@ export const Menus = () => {
                 }) : null
     },[])
     
-    
+    console.log("innnn =", CompaniesData);
    const menus = [
     (authData && authData.is_staff && authData.is_superuser)? 
     {
@@ -235,6 +299,26 @@ export const Menus = () => {
             //     type: "nav-item",
             //     icon: <ChatOutlinedIcon sx={{fontSize: 20}}/>
             // },
+            {
+                label: 'Accounts',
+                type: "collapsible",
+                icon: <SourceOutlinedIcon sx={{fontSize: 20}}/>,
+                children: [
+                    {
+                        uri: "/dashboards/listAccounts",
+                        label: 'List Accounts',
+                        // label: 'sidebar.menuItem.createUser',
+                        type: "nav-item",
+                        icon: <CurrencyExchangeOutlinedIcon sx={{fontSize: 20}}/>
+                    },
+                ]
+            },
+            {
+                label: 'Companies',
+                type: "collapsible",
+                icon: <SourceOutlinedIcon sx={{fontSize: 20}}/>,
+                children:  companies 
+            },
             {
                 label: 'WhatsApp',
                 type: "collapsible",
