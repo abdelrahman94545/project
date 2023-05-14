@@ -154,6 +154,7 @@ const Filter = ({setFilteredResult, reduxData, filterKey}) => {
                         name={filterField}
                         onChange={filterDataChangeFun}
                         type="search"
+                        label={filterField.replaceAll("_"," ").replace("get","")}
                     />
                 </Box>
                 ): filterField === "active" ? (
