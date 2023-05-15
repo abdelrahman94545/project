@@ -134,7 +134,7 @@ export const Menus = () => {
                 }) : null
     },[])
     
-    console.log("innnn =", CompaniesData);
+    
    const menus = [
     (authData && authData.is_staff && authData.is_superuser)? 
     {
@@ -287,7 +287,7 @@ export const Menus = () => {
     //     ]
     // },
    
-
+    (authData && authData.is_superuser === false)? 
     {
         label: 'sidebar.menu.apps',
         type: "section",
@@ -339,7 +339,7 @@ export const Menus = () => {
                 icon: <EmailOutlinedIcon sx={{fontSize: 20}}/>
             }
         ]
-    },
+    } : null ,
     {
         label: 'sidebar.menu.cards',
         type: "section",

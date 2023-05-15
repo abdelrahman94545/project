@@ -173,6 +173,8 @@ const ContactItem = ({contact, view}) => {
             </JumboGridItem>
         )
     }
+
+    console.log("contact =",contact);
     return (
         <React.Fragment>
             <JumboListItem
@@ -242,7 +244,8 @@ const ContactItem = ({contact, view}) => {
                                             display: {sm: 'none'}
                                         }}
                                     >
-                                        {contact.email}
+                                        {contact.email_address}
+                                        {/* {contact.email} */}
                                     </Typography>
                                 </Item>
                                 <Item
@@ -251,7 +254,8 @@ const ContactItem = ({contact, view}) => {
                                         display: {xs: 'none', sm: 'block'}
                                     }}
                                 >
-                                    <Typography variant={"body1"} noWrap>{contact.email}</Typography>
+                                    <Typography variant={"body1"} noWrap>{contact.email_address}</Typography>
+                                    {/* <Typography variant={"body1"} noWrap>{contact.email}</Typography> */}
                                 </Item>
                                 <Item
                                     sx={{
@@ -259,7 +263,8 @@ const ContactItem = ({contact, view}) => {
                                         display: {xs: 'none', md: 'block'}
                                     }}
                                 >
-                                    <Typography variant={"body1"} noWrap>{contact.phone}</Typography>
+                                    <Typography variant={"body1"} noWrap>{contact.phonenumber}</Typography>
+                                    {/* <Typography variant={"body1"} noWrap>{contact.phone}</Typography> */}
                                 </Item>
                                 <Item
                                     sx={{

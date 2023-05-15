@@ -8,14 +8,14 @@ import Zoom from "@mui/material/Zoom";
 import Div from "@jumbo/shared/Div";
 import ToolbarAction from "@jumbo/components/JumboList/components/JumboListToolbar/ToolbarAction";
 
-const JumboListToolbar = ({children, bulkActions, hidePagination, hideItemsPerPage, action, actionTail}) => {
+const JumboListToolbar = ({children, bulkActions, hidePagination, hideItemsPerPage, action, actionTail, page, paginationChangeFun}) => {
     const {
         selectedItems, data, setBulkActions,
     } = useJumboList();
 
-    React.useEffect(() => {
-        setBulkActions(bulkActions ?? []);
-    }, [bulkActions]);
+    // React.useEffect(() => {
+    //     setBulkActions(bulkActions ?? []);
+    // }, [bulkActions]);
 
     if (!children && hidePagination && !action && !actionTail && bulkActions.length <= 0) {
         return null;
@@ -26,28 +26,30 @@ const JumboListToolbar = ({children, bulkActions, hidePagination, hideItemsPerPa
             <ListItemText
                 primary={
                     <Stack direction={"row"} spacing={2}>
-                        {
+                        {/* {
                             bulkActions && data?.length > 0 &&
                             <Div>
                                 <MultiSelectControl/>
                             </Div>
-                        }
-                        {
+                        } */}
+                        {/* {
                             bulkActions && selectedItems.length > 0 &&
                             <Zoom in={selectedItems.length > 0}>
                                 <Div>
                                     {bulkActions}
                                 </Div>
                             </Zoom>
-                        }
+                        } */}
                         <Div>
                             {children}
                         </Div>
                     </Stack>
                 }
             />
-            <ToolbarAction actionTail={actionTail} action={action} hidePagination={hidePagination}
+            <ToolbarAction page={page} paginationChangeFun={paginationChangeFun} actionTail={actionTail} action={action} hidePagination={true}
                            hideItemsPerPage={hideItemsPerPage}/>
+            {/* <ToolbarAction actionTail={actionTail} action={action} hidePagination={hidePagination}
+                           hideItemsPerPage={hideItemsPerPage}/> */}
         </ListItem>
     );
 };

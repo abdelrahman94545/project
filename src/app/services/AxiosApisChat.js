@@ -129,11 +129,13 @@ const AxiosApisChat = () => {
 
 
     // all contacts list Data
-    axiosApisChat.getAllContacts = async (page, pageSize, Token, refreshVal) => {  
+    axiosApisChat.getAllContacts = async (page, Token, refreshVal) => {  
+        // axiosApisChat.getAllContacts = async (page, pageSize, Token, refreshVal) => {  
         const status = await AuthAxios().verifyAndRefreshToken(Token, refreshVal)
         if(status === 200)
         {
-            const {data} = await Instance.get(`/contact/contact/?page=${page}&page_size=${pageSize}`,
+            const {data} = await Instance.get(`/contact/contact/?page=${page}&page_size=10`,
+            // const {data} = await Instance.get(`/contact/contact/?page=${page}&page_size=${pageSize}`,
              { 
                 headers: {
                     "Authorization" : `Bearer ${Token}`,

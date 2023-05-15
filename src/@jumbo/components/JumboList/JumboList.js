@@ -283,7 +283,8 @@ const JumboList = React.forwardRef((props, ref) => {
                     // data.length > 0 && view === "grid" &&
                     <Grid container spacing={3} sx={sx}>
                         {
-                            data.map(row => (
+                            apiData.map(row => (
+                                // data.map(row => (
                                 <React.Fragment key={row[primaryKey]}>
                                     {renderItem(row)}
                                 </React.Fragment>

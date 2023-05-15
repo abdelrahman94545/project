@@ -4,7 +4,9 @@ import useJumboList from "@jumbo/components/JumboList/hooks/useJumboList";
 import Div from "@jumbo/shared/Div";
 import TablePagination from "@mui/material/TablePagination";
 
-const ToolbarAction = ({action, actionTail, hidePagination, hideItemsPerPage}) => {
+import { useSelector, useDispatch } from 'react-redux';
+
+const ToolbarAction = ({page , paginationChangeFun ,action, actionTail, hidePagination, hideItemsPerPage}) => {
     const {
         activePage, itemsPerPage, totalCount,
         isLoading, setActivePage, setItemsPerPage, itemsPerPageOptions,
@@ -12,6 +14,9 @@ const ToolbarAction = ({action, actionTail, hidePagination, hideItemsPerPage}) =
     } = useJumboList();
 
     const paginationCount = Math.ceil(totalCount / itemsPerPage);
+
+    const contactsCount = useSelector(state => state.Contacts.contactsCount)
+    
 
     return (
         <Stack direction={"row"} alignItems={"center"}>
@@ -22,19 +27,34 @@ const ToolbarAction = ({action, actionTail, hidePagination, hideItemsPerPage}) =
                 </Div>
             }
             {
-                !hidePagination && Number.isInteger(paginationCount) && !(data?.length <= 0 && isLoading) &&
+                // !hidePagination && Number.isInteger(paginationCount) && !(data?.length <= 0 && isLoading) &&
                 <TablePagination
                     component="div"
-                    count={totalCount}
-                    page={activePage}
+                    count={contactsCount ? contactsCount : 0}
+                    page={page}
                     onPageChange={
                         (event, nextPageNumber) => {
-                            setActivePage(nextPageNumber);
+                            console.log("event =", event);
+                            console.log("nextPageNumber =", nextPageNumber);
+                            // setActivePage(nextPageNumber);
+                            paginationChangeFun(nextPageNumber)
                         }
                     }
-                    rowsPerPage={itemsPerPage}
-                    onRowsPerPageChange={(event) => setItemsPerPage(event.target.value)}
-                    rowsPerPageOptions={hideItemsPerPage ? [] : itemsPerPageOptions}
+                    rowsPerPage={10}
+                    rowsPerPageOptions={[]}
+                    // onRowsPerPageChange={(event) => setItemsPerPage(event.target.value)}
+                    // rowsPerPageOptions={hideItemsPerPage ? [] : itemsPerPageOptions}
+
+                    // count={totalCount}
+                    // page={activePage}
+                    // onPageChange={
+                    //     (event, nextPageNumber) => {
+                    //         setActivePage(nextPageNumber);
+                    //     }
+                    // }
+                    // rowsPerPage={itemsPerPage}
+                    // onRowsPerPageChange={(event) => setItemsPerPage(event.target.value)}
+                    // rowsPerPageOptions={hideItemsPerPage ? [] : itemsPerPageOptions}
                 />
             }
             {
