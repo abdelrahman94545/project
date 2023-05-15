@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ActiveConversationChat from "./ActiveConversationChat";
 import useChatApp from "../../../hooks/useChatApp";
 
@@ -21,13 +21,24 @@ const ConversationChatGroupByDate = () => {
     //     return [];
     // }, [activeConversation]);
 
+    const [newActiveConversation, setNewActiveConversation] = useState()
 
-    // console.log("activeConversation 22=", activeConversation);
+
+    useEffect(()=>{
+        if(activeConversation)
+        {
+            let newData = [...activeConversation]
+            setNewActiveConversation(newData)
+        }
+    },[activeConversation])
+
+
     return (
         <React.Fragment>
 
             {
-                activeConversation?.sort((a, b) => { return a.id - b.id })
+                newActiveConversation?.sort((a, b) => { return a.id - b.id })
+                // activeConversation?.sort((a, b) => { return a.id - b.id })
                 .map((messagesGroupByDate, index) => (
                     // conversationMessages?.map((messagesGroupByDate, index) => (
                     <ActiveConversationChat key={index} conversation={messagesGroupByDate}/>

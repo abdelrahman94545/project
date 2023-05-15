@@ -14,6 +14,8 @@ import {CircularProgress, Typography} from "@mui/material";
 import AxiosApisChat from "../../../../../services/AxiosApisChat";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { addActiveChatData,updateActiveChatData } from "../../../../../redux2/reducers/chatSlice";
 
 const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
     const {setActiveConversation, activeConversation} = useChatApp();
@@ -33,7 +35,11 @@ const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
     const [chatRoomData ,setChatRoomData] = useState()
+    const [roomIdWebSocket ,setRoomIdWebSocket] = useState()
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const chatRoomDataRedux = useSelector(state => state.Chat.activeChat)
+    const Rooms = useSelector(state => state.Chat.rooms)
 
     const getChatRommDataFun = async (Id,Token, refreshVal) => {
 
@@ -49,7 +55,7 @@ const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
                 }
 
                 setChatRoomData(data.results)
-                // dispatch(addAccount(data.results))
+                dispatch(addActiveChatData(data))
             })
            
         }
@@ -73,19 +79,67 @@ const ActiveConversation = React.forwardRef(({onRefresh}, ref) => {
         // {
             if(id)
             {
-            getChatRommDataFun(id, localStorageToken, localStorageRefresh)
+                getChatRommDataFun(id, localStorageToken, localStorageRefresh)
+
+                if(Rooms)
+                {
+                    Rooms.map((room)=>{
+                        // console.log("room11  =",room);
+                        // console.log("room222  =",room.id);
+                        console.log("id  =", id);
+                        if(id == room.id)
+                        {
+                            console.log("room33  =",room.roomId);
+                            setRoomIdWebSocket(room.roomId)
+                        }
+                    })
+                }
             }
         // }
+
+       
     },[id])
 
 
+    const [WebSocketData, setWebSocketData] = useState()
+    const chatSocket = new WebSocket(`ws://62.171.166.157:2020/ws/rooms/chatroom/${roomIdWebSocket}/`);
+    // const chatSocket = new WebSocket("ws://62.171.166.157:2020/ws/rooms/chatroom/GGdCKyGjNLougvbHj6ZkmL/");
+
+
+console.log("chatSocket6666 =", chatSocket);
+
+useEffect(()=>{
+    chatSocket.onmessage = function (event) {
+        console.log("fun in");
+        const json = JSON.parse(event.data);
+        try {
+            console.log("json =",json);
+    
+            if(json !== WebSocketData)
+            {
+                setWebSocketData(json)
+                dispatch(updateActiveChatData(json))
+            }
+        //   if ((json.event = "data")) {
+        //     setBids(json.data.bids.slice(0, 5));
+        //   }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+},[roomIdWebSocket])
+   
+console.log("roomIdWebSocket =", roomIdWebSocket);
+
 
     React.useEffect(() => {
-        setActiveConversation(chatRoomData);
+        setActiveConversation(chatRoomDataRedux);
+        // setActiveConversation(chatRoomData);
         // setActiveConversation(conversationQuery?.conversation);
         if (scrollbarRef)
             scrollbarRef.current?.scrollToBottom();
-    }, [chatRoomData, scrollbarRef]);
+    }, [chatRoomDataRedux, scrollbarRef]);
+// }, [chatRoomData, scrollbarRef]);
 // }, [conversationQuery, scrollbarRef]);
 
 // console.log("activeConversation 1=", activeConversation);

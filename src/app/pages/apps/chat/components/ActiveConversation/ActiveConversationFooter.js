@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useMutation} from "react-query";
 import Div from "@jumbo/shared/Div";
 import {TextField} from "@mui/material";
@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {useParams} from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { io } from 'socket.io-client';
 
 const ActiveConversationFooter = () => {
 
@@ -18,8 +19,15 @@ const ActiveConversationFooter = () => {
     const localStorageToken = localStorage.getItem('token')
     const localStorageRefresh = localStorage.getItem('refresh')
     const navigate = useNavigate();
+    // const socket = io.connect("ws://10.0.0.9:8000/")
+    // const socket = io.connect("ws://10.0.0.9:8000/ws/rooms/chatroom/GGdCKyGjNLougvbHj6ZkmL/")
 
-    
+    // const chatSocket = new WebSocket("ws://10.0.0.9:8000/ws/rooms/chatroom/GGdCKyGjNLougvbHj6ZkmL/");
+
+    // chatSocket.onmessage = function(e) {
+    //     console.log(`data ${e.data}`)
+         
+    //    };
 
     const sendChatMessageFun = async (messageData ,Token, refreshVal) => {
 
@@ -92,8 +100,18 @@ const ActiveConversationFooter = () => {
             // addMessageMutation.mutate({conversationID: activeConversation.id, message: message})
             setMessage('');
         }
+
+
+
+        // socket.emit("onmessage",{message})
     };
 
+
+    // useEffect(()=>{
+    //     socket.on((data)=>{
+    //         console.log("recive Data =", data);
+    //     })
+    // },[socket])
 
     
 

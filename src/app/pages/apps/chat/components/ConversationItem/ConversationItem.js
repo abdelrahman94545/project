@@ -13,7 +13,7 @@ const ConversationItem = ({conversationItem}) => {
 
     const {channelId} = useParams();
 
-    const {setUserActiveConversationData} = useChatApp();
+    const {setUserActiveConversationData} = useChatApp(); 
 
     const navigate = useNavigate();
     const handleConversationClick = () => {

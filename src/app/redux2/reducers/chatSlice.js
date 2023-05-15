@@ -7,6 +7,7 @@ const initialState = {
     contacts: [],
     nextContacts: null,
     previousContacts: null,
+    activeChat: null,
 }
 
 
@@ -60,10 +61,24 @@ export const chatSlice = createSlice({
             }
                    
         },
+
+        addActiveChatData: (state , action) => {
+            return {
+                ...state,
+                activeChat: action.payload.results
+            }
+        },
+
+        updateActiveChatData: (state , action) => {
+            return {
+                ...state,
+                activeChat: state.activeChat.concat(action.payload),
+            }
+        }
         
     }
 })
 
-export const {updateRooms, addRooms, updateContacts, addContacts} = chatSlice.actions
+export const {updateRooms, addRooms, updateContacts, addContacts, addActiveChatData, updateActiveChatData} = chatSlice.actions
 
 export default chatSlice.reducer

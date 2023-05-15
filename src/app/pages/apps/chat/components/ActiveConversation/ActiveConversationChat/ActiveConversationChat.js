@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Div from "@jumbo/shared/Div";
 import Chip from "@mui/material/Chip";
 import SentMessageContent from "./SentMessageContent";
 import ReceivedMessageContent from "./ReceivedMessageContent";
 
 import moment from 'moment';
+import {  useDispatch } from 'react-redux';
+import { updateActiveChatData } from "../../../../../../redux2/reducers/chatSlice";
 // import useChatApp from "../../../hooks/useChatApp";
 // import useChatApp from "../../hooks/useChatApp";
 
@@ -12,6 +14,60 @@ const ActiveConversationChat = ({conversation}) => {
 
     // const {userActiveConversationData} = useChatApp();
 // console.log("conversation =", conversation);
+// const [WebSocketData, setWebSocketData] = useState()
+// const dispatch = useDispatch();
+
+
+// const chatSocket = new WebSocket("ws://62.171.166.157:2020/ws/rooms/chatroom/GGdCKyGjNLougvbHj6ZkmL/");
+
+
+// // chatSocket.onmessage = function(e) {
+// //     console.log(`data ${e.data}`)
+
+// //    };
+
+
+//    chatSocket.onmessage = function (event) {
+//     console.log("fun in");
+//     const json = JSON.parse(event.data);
+//     try {
+//         console.log("json =",json);
+
+//         if(json !== WebSocketData)
+//         {
+//             setWebSocketData(json)
+//         }
+//     //   if ((json.event = "data")) {
+//     //     setBids(json.data.bids.slice(0, 5));
+//     //   }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+
+    // chatSocket.onmessage = function(e) {
+    //     console.log(`data ${e.data}`)
+    //     // if(e.data !== WebSocketData)
+    //     // {
+    //     //     setWebSocketData(e.data)
+    //     // }
+        
+    //     // dispatch(updateActiveChatData(e.data))
+    //    };
+
+
+//        useEffect(()=>{
+//         // let WebSocketData = {
+//         //     message: "welll",
+//         //     method: "Send",
+//         //     timestamp: "2023-05-15T12:33:32.674937Z"
+//         // }
+
+// console.log("in");
+
+//        },[WebSocketData])
+
+    
 
 
     return (
